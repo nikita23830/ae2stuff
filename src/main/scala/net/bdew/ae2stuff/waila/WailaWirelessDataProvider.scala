@@ -9,6 +9,7 @@
 
 package net.bdew.ae2stuff.waila
 
+import appeng.api.config.PowerMultiplier
 import mcp.mobius.waila.api.{IWailaConfigHandler, IWailaDataAccessor}
 import net.bdew.ae2stuff.machines.wireless.TileWireless
 import net.bdew.lib.block.BlockRef
@@ -27,7 +28,7 @@ object WailaWirelessDataProvider extends BaseDataProvider(classOf[TileWireless])
         "connected" -> true,
         "target" -> pos,
         "channels" -> (if (te.connection != null) te.connection.getUsedChannels else 0),
-        "power" -> te.getIdlePowerUsage
+        "power" -> PowerMultiplier.CONFIG.multiply(te.getIdlePowerUsage)
       ))
     } else {
       tag.setTag("wireless_waila", NBT("connected" -> false))
