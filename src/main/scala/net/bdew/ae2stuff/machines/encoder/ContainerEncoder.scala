@@ -16,14 +16,25 @@ import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.CraftingManager
 
-class ContainerEncoder(val te: TileEncoder, player: EntityPlayer) extends BaseContainer(te) {
+class ContainerEncoder(val te: TileEncoder, player: EntityPlayer)
+    extends BaseContainer(te) {
 
   for (x <- 0 until 3; y <- 0 until 3) {
-    addSlotToContainer(new SlotFakeCrafting(te, te.slots.recipe(x + y * 3), 10 + x * 18, 17 + y * 18, updateRecipe))
+    addSlotToContainer(
+      new SlotFakeCrafting(
+        te,
+        te.slots.recipe(x + y * 3),
+        10 + x * 18,
+        17 + y * 18,
+        updateRecipe
+      )
+    )
   }
 
   addSlotToContainer(new SlotFakeCraftingResult(te, te.slots.result, 104, 35))
-  val patternSlot = addSlotToContainer(new SlotValidating(te, te.slots.patterns, 143, 17))
+  val patternSlot = addSlotToContainer(
+    new SlotValidating(te, te.slots.patterns, 143, 17)
+  )
   addSlotToContainer(new SlotFakeEncodedPattern(te, te.slots.encoded, 143, 53))
 
   bindPlayerInventory(player.inventory, 8, 84, 142)
@@ -36,7 +47,12 @@ class ContainerEncoder(val te: TileEncoder, player: EntityPlayer) extends BaseCo
     te.setInventorySlotContents(te.slots.result, r)
   }
 
-  override def slotClick(slotNum: Int, button: Int, modifiers: Int, player: EntityPlayer): ItemStack = {
+  override def slotClick(
+      slotNum: Int,
+      button: Int,
+      modifiers: Int,
+      player: EntityPlayer
+  ): ItemStack = {
     import scala.collection.JavaConversions._
     if (inventorySlots.isDefinedAt(slotNum)) {
       val slot = getSlot(slotNum)
@@ -45,11 +61,18 @@ class ContainerEncoder(val te: TileEncoder, player: EntityPlayer) extends BaseCo
         val slotStack = slot.getStack
         if (AE2Defs.items.encodedPattern().isSameAs(playerStack)) {
           if (slotStack == null) {
-            slot.putStack(AE2Defs.materials.blankPattern().maybeStack(playerStack.stackSize).get())
+            slot.putStack(
+              AE2Defs.materials
+                .blankPattern()
+                .maybeStack(playerStack.stackSize)
+                .get()
+            )
             player.inventory.setItemStack(null)
             detectAndSendChanges()
             return null
-          } else if (slotStack.stackSize + playerStack.stackSize <= slotStack.getMaxStackSize) {
+          } else if (
+            slotStack.stackSize + playerStack.stackSize <= slotStack.getMaxStackSize
+          ) {
             slotStack.stackSize += playerStack.stackSize
             slot.onSlotChanged()
             player.inventory.setItemStack(null)
@@ -70,16 +93,30 @@ class ContainerEncoder(val te: TileEncoder, player: EntityPlayer) extends BaseCo
     r
   }
 
-  override def transferStackInSlot(player: EntityPlayer, slot: Int): ItemStack = {
+  override def transferStackInSlot(
+      player: EntityPlayer,
+      slot: Int
+  ): ItemStack = {
     val fromSlot = getSlot(slot)
     val clickedStack = fromSlot.getStack
-    if (fromSlot.inventory == player.inventory && AE2Defs.items.encodedPattern().isSameAs(clickedStack)) {
+    if (
+      fromSlot.inventory == player.inventory && AE2Defs.items
+        .encodedPattern()
+        .isSameAs(clickedStack)
+    ) {
       val patternStack = patternSlot.getStack
       if (patternStack == null) {
-        patternSlot.putStack(AE2Defs.materials.blankPattern().maybeStack(clickedStack.stackSize).get())
+        patternSlot.putStack(
+          AE2Defs.materials
+            .blankPattern()
+            .maybeStack(clickedStack.stackSize)
+            .get()
+        )
         fromSlot.putStack(null)
         return null
-      } else if (patternStack.stackSize + clickedStack.stackSize <= patternStack.getMaxStackSize) {
+      } else if (
+        patternStack.stackSize + clickedStack.stackSize <= patternStack.getMaxStackSize
+      ) {
         patternStack.stackSize += clickedStack.stackSize
         patternSlot.onSlotChanged()
         fromSlot.putStack(null)
@@ -98,5 +135,6 @@ class ContainerEncoder(val te: TileEncoder, player: EntityPlayer) extends BaseCo
     }
   }
 
-  override def canInteractWith(player: EntityPlayer) = te.isUseableByPlayer(player)
+  override def canInteractWith(player: EntityPlayer) =
+    te.isUseableByPlayer(player)
 }

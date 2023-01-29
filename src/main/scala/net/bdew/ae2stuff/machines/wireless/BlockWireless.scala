@@ -21,22 +21,49 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
 
-object BlockWireless extends SimpleBlock("Wireless", MachineMaterial) with HasTE[TileWireless] with BlockWrenchable {
+object BlockWireless
+    extends SimpleBlock("Wireless", MachineMaterial)
+    with HasTE[TileWireless]
+    with BlockWrenchable {
   override val TEClass = classOf[TileWireless]
 
   setHardness(1)
 
-  override def breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int): Unit = {
+  override def breakBlock(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      block: Block,
+      meta: Int
+  ): Unit = {
     getTE(world, x, y, z).doUnlink()
     super.breakBlock(world, x, y, z, block, meta)
   }
 
-  override def onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, player: EntityLivingBase, stack: ItemStack) {
+  override def onBlockPlacedBy(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityLivingBase,
+      stack: ItemStack
+  ) {
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
   }
 
-  override def onBlockActivatedReal(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, xOffs: Float, yOffs: Float, zOffs: Float): Boolean = false
+  override def onBlockActivatedReal(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityPlayer,
+      side: Int,
+      xOffs: Float,
+      yOffs: Float,
+      zOffs: Float
+  ): Boolean = false
 
   var icon_on_side: IIcon = null
   var icon_off_side: IIcon = null

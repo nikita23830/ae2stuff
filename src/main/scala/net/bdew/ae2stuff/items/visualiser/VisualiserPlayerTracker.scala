@@ -11,7 +11,11 @@ package net.bdew.ae2stuff.items.visualiser
 
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.PlayerEvent.{PlayerChangedDimensionEvent, PlayerLoggedOutEvent, PlayerRespawnEvent}
+import cpw.mods.fml.common.gameevent.PlayerEvent.{
+  PlayerChangedDimensionEvent,
+  PlayerLoggedOutEvent,
+  PlayerRespawnEvent
+}
 import net.bdew.lib.block.BlockRef
 import net.minecraft.entity.player.EntityPlayer
 
@@ -49,7 +53,9 @@ object VisualiserPlayerTracker {
   def handlePlayerLogout(ev: PlayerLoggedOutEvent) = reset(ev.player)
 
   @SubscribeEvent
-  def handlePlayerChangedDimension(ev: PlayerChangedDimensionEvent) = reset(ev.player)
+  def handlePlayerChangedDimension(ev: PlayerChangedDimensionEvent) = reset(
+    ev.player
+  )
 
   @SubscribeEvent
   def handlePlayerRespawn(ev: PlayerRespawnEvent) = reset(ev.player)

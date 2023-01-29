@@ -20,31 +20,59 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 
-object WailaWirelessDataProvider extends BaseDataProvider(classOf[TileWireless]) {
-  override def getNBTTag(player: EntityPlayerMP, te: TileWireless, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound = {
+object WailaWirelessDataProvider
+    extends BaseDataProvider(classOf[TileWireless]) {
+  override def getNBTTag(
+      player: EntityPlayerMP,
+      te: TileWireless,
+      tag: NBTTagCompound,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int
+  ): NBTTagCompound = {
     if (te.isLinked) {
-      val pos = te.link map (link => NBT.from(link.writeToNBT _)) getOrElse new NBTTagCompound
-      tag.setTag("wireless_waila", NBT(
-        "connected" -> true,
-        "target" -> pos,
-        "channels" -> (if (te.connection != null) te.connection.getUsedChannels else 0),
-        "power" -> PowerMultiplier.CONFIG.multiply(te.getIdlePowerUsage)
-      ))
+      val pos = te.link map (link =>
+        NBT.from(link.writeToNBT _)
+      ) getOrElse new NBTTagCompound
+      tag.setTag(
+        "wireless_waila",
+        NBT(
+          "connected" -> true,
+          "target" -> pos,
+          "channels" -> (if (te.connection != null)
+                           te.connection.getUsedChannels
+                         else 0),
+          "power" -> PowerMultiplier.CONFIG.multiply(te.getIdlePowerUsage)
+        )
+      )
     } else {
       tag.setTag("wireless_waila", NBT("connected" -> false))
     }
     tag
   }
 
-  override def getBodyStrings(target: TileWireless, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = {
+  override def getBodyStrings(
+      target: TileWireless,
+      stack: ItemStack,
+      acc: IWailaDataAccessor,
+      cfg: IWailaConfigHandler
+  ): Iterable[String] = {
     if (acc.getNBTData.hasKey("wireless_waila")) {
       val data = acc.getNBTData.getCompoundTag("wireless_waila")
       if (data.getBoolean("connected")) {
         val pos = BlockRef.fromNBT(data.getCompoundTag("target"))
         List(
-          Misc.toLocalF("ae2stuff.waila.wireless.connected", pos.x, pos.y, pos.z),
-          Misc.toLocalF("ae2stuff.waila.wireless.channels", data.getInteger("channels")),
-          Misc.toLocalF("ae2stuff.waila.wireless.power", DecFormat.short(data.getDouble("power")))
+          Misc
+            .toLocalF("ae2stuff.waila.wireless.connected", pos.x, pos.y, pos.z),
+          Misc.toLocalF(
+            "ae2stuff.waila.wireless.channels",
+            data.getInteger("channels")
+          ),
+          Misc.toLocalF(
+            "ae2stuff.waila.wireless.power",
+            DecFormat.short(data.getDouble("power"))
+          )
         )
       } else {
         List(Misc.toLocal("ae2stuff.waila.wireless.notconnected"))

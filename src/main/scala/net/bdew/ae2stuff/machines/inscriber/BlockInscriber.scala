@@ -22,7 +22,11 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 
-object BlockInscriber extends SimpleBlock("Inscriber", MachineMaterial) with HasTE[TileInscriber] with BlockWrenchable with BlockKeepData {
+object BlockInscriber
+    extends SimpleBlock("Inscriber", MachineMaterial)
+    with HasTE[TileInscriber]
+    with BlockWrenchable
+    with BlockKeepData {
   override val TEClass = classOf[TileInscriber]
 
   setHardness(1)
@@ -32,7 +36,10 @@ object BlockInscriber extends SimpleBlock("Inscriber", MachineMaterial) with Has
   var sideIconOff: IIcon = null
 
   override def getIcon(side: Int, meta: Int) =
-    if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal())
+    if (
+      side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN
+        .ordinal()
+    )
       topIcon
     else if (meta == 1)
       sideIconOn
@@ -46,12 +53,29 @@ object BlockInscriber extends SimpleBlock("Inscriber", MachineMaterial) with Has
     topIcon = reg.registerIcon(Misc.iconName(modId, name, "top"))
   }
 
-  override def onBlockActivatedReal(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, xOffs: Float, yOffs: Float, zOffs: Float): Boolean = {
+  override def onBlockActivatedReal(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityPlayer,
+      side: Int,
+      xOffs: Float,
+      yOffs: Float,
+      zOffs: Float
+  ): Boolean = {
     player.openGui(AE2Stuff, MachineInscriber.guiId, world, x, y, z)
     true
   }
 
-  override def onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, player: EntityLivingBase, stack: ItemStack) {
+  override def onBlockPlacedBy(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityLivingBase,
+      stack: ItemStack
+  ) {
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
   }

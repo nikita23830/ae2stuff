@@ -14,7 +14,11 @@ import java.util.Locale
 
 import appeng.api.networking.{GridFlags, IGridConnection, IGridHost}
 import net.bdew.ae2stuff.misc.ItemLocationStore
-import net.bdew.ae2stuff.network.{MsgVisualisationData, MsgVisualisationMode, NetHandler}
+import net.bdew.ae2stuff.network.{
+  MsgVisualisationData,
+  MsgVisualisationMode,
+  NetHandler
+}
 import net.bdew.lib.Misc
 import net.bdew.lib.block.BlockRef
 import net.bdew.lib.helpers.ChatHelper._
@@ -30,12 +34,30 @@ import net.minecraftforge.common.util.ForgeDirection
 object ItemVisualiser extends SimpleItem("Visualiser") with ItemLocationStore {
   setMaxStackSize(1)
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
+  override def onItemUse(
+      stack: ItemStack,
+      player: EntityPlayer,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      side: Int,
+      xOff: Float,
+      yOff: Float,
+      zOff: Float
+  ): Boolean = {
     if (!world.isRemote) {
       val pos = BlockRef(x, y, z)
       pos.getTile[IGridHost](world) foreach { tile =>
         setLocation(stack, pos, world.provider.dimensionId)
-        player.addChatMessage(L("ae2stuff.visualiser.bound", pos.x.toString, pos.y.toString, pos.z.toString).setColor(Color.GREEN))
+        player.addChatMessage(
+          L(
+            "ae2stuff.visualiser.bound",
+            pos.x.toString,
+            pos.y.toString,
+            pos.z.toString
+          ).setColor(Color.GREEN)
+        )
       }
     }
     true
@@ -53,18 +75,32 @@ object ItemVisualiser extends SimpleItem("Visualiser") with ItemLocationStore {
     stack.getTagCompound.setByte("mode", mode.id.toByte)
   }
 
-  NetHandler.regServerHandler {
-    case (MsgVisualisationMode(mode), player) =>
-      if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == this) {
-        setMode(player.inventory.getCurrentItem, mode)
+  NetHandler.regServerHandler { case (MsgVisualisationMode(mode), player) =>
+    if (
+      player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == this
+    ) {
+      setMode(player.inventory.getCurrentItem, mode)
 
-        import net.bdew.lib.helpers.ChatHelper._
-        player.addChatMessage(L("ae2stuff.visualiser.set", L("ae2stuff.visualiser.mode." + mode.toString.toLowerCase(Locale.US)).setColor(Color.YELLOW)))
-      }
+      import net.bdew.lib.helpers.ChatHelper._
+      player.addChatMessage(
+        L(
+          "ae2stuff.visualiser.set",
+          L("ae2stuff.visualiser.mode." + mode.toString.toLowerCase(Locale.US))
+            .setColor(Color.YELLOW)
+        )
+      )
+    }
   }
 
-  override def onUpdate(stack: ItemStack, world: World, entity: Entity, slot: Int, active: Boolean): Unit = {
-    if (!active || world.isRemote || !entity.isInstanceOf[EntityPlayerMP]) return
+  override def onUpdate(
+      stack: ItemStack,
+      world: World,
+      entity: Entity,
+      slot: Int,
+      active: Boolean
+  ): Unit = {
+    if (!active || world.isRemote || !entity.isInstanceOf[EntityPlayerMP])
+      return
 
     val player = entity.asInstanceOf[EntityPlayerMP]
     val stack = player.inventory.getCurrentItem
@@ -74,7 +110,10 @@ object ItemVisualiser extends SimpleItem("Visualiser") with ItemLocationStore {
     val dim = getDimension(stack)
     val loc = getLocation(stack)
 
-    if ((dim == world.provider.dimensionId) && VisualiserPlayerTracker.needToUpdate(player, loc, dim)) {
+    if (
+      (dim == world.provider.dimensionId) && VisualiserPlayerTracker
+        .needToUpdate(player, loc, dim)
+    ) {
       for {
         host <- loc.getTile[IGridHost](world)
         node <- Option(host.getGridNode(ForgeDirection.UNKNOWN))
@@ -90,7 +129,8 @@ object ItemVisualiser extends SimpleItem("Visualiser") with ItemLocationStore {
             connections ++= node.getConnections
             var flags = VNodeFlags.ValueSet.empty
             if (!node.meetsChannelRequirements()) flags += VNodeFlags.MISSING
-            if (node.hasFlag(GridFlags.DENSE_CAPACITY)) flags += VNodeFlags.DENSE
+            if (node.hasFlag(GridFlags.DENSE_CAPACITY))
+              flags += VNodeFlags.DENSE
             Some(node -> VNode(loc.x, loc.y, loc.z, flags))
           } else None
         }).flatten.toMap
@@ -100,24 +140,48 @@ object ItemVisualiser extends SimpleItem("Visualiser") with ItemLocationStore {
           n1 <- nodes.get(c.a())
           n2 <- nodes.get(c.b()) if n1 != n2
         } yield {
-            var flags = VLinkFlags.ValueSet.empty
-            if (c.a().hasFlag(GridFlags.DENSE_CAPACITY) && c.b().hasFlag(GridFlags.DENSE_CAPACITY)) flags += VLinkFlags.DENSE
-            if (c.a().hasFlag(GridFlags.CANNOT_CARRY_COMPRESSED) && c.b().hasFlag(GridFlags.CANNOT_CARRY_COMPRESSED)) flags += VLinkFlags.COMPRESSED
-            VLink(n1, n2, c.getUsedChannels.toByte, flags)
-          }
+          var flags = VLinkFlags.ValueSet.empty
+          if (
+            c.a().hasFlag(GridFlags.DENSE_CAPACITY) && c
+              .b()
+              .hasFlag(GridFlags.DENSE_CAPACITY)
+          ) flags += VLinkFlags.DENSE
+          if (
+            c.a().hasFlag(GridFlags.CANNOT_CARRY_COMPRESSED) && c
+              .b()
+              .hasFlag(GridFlags.CANNOT_CARRY_COMPRESSED)
+          ) flags += VLinkFlags.COMPRESSED
+          VLink(n1, n2, c.getUsedChannels.toByte, flags)
+        }
 
-        NetHandler.sendTo(MsgVisualisationData(new VisualisationData(nodes.values.toList, connList.toList)), player)
+        NetHandler.sendTo(
+          MsgVisualisationData(
+            new VisualisationData(nodes.values.toList, connList.toList)
+          ),
+          player
+        )
       }
     }
   }
 
-  override def addInformation(stack: ItemStack, player: EntityPlayer, list: util.List[_], extended: Boolean): Unit = {
+  override def addInformation(
+      stack: ItemStack,
+      player: EntityPlayer,
+      list: util.List[_],
+      extended: Boolean
+  ): Unit = {
     val strings = list.asInstanceOf[util.List[String]]
-    strings.add("%s %s%s".format(
-      Misc.toLocal("ae2stuff.visualiser.mode"),
-      EnumChatFormatting.YELLOW,
-      Misc.toLocal("ae2stuff.visualiser.mode." + getMode(stack).toString.toLowerCase(Locale.US))
-    ))
+    strings.add(
+      "%s %s%s".format(
+        Misc.toLocal("ae2stuff.visualiser.mode"),
+        EnumChatFormatting.YELLOW,
+        Misc.toLocal(
+          "ae2stuff.visualiser.mode." + getMode(stack).toString.toLowerCase(
+            Locale.US
+          )
+        )
+      )
+    )
   }
 
 }

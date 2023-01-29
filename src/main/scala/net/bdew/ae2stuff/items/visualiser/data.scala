@@ -23,15 +23,23 @@ object VLinkFlags extends Enumeration {
 
 case class VNode(x: Int, y: Int, z: Int, flags: VNodeFlags.ValueSet)
 
-case class VLink(node1: VNode, node2: VNode, channels: Byte, flags: VLinkFlags.ValueSet)
+case class VLink(
+    node1: VNode,
+    node2: VNode,
+    channels: Byte,
+    flags: VLinkFlags.ValueSet
+)
 
-class VisualisationData(var nodes: Seq[VNode], var links: Seq[VLink]) extends Externalizable {
+class VisualisationData(var nodes: Seq[VNode], var links: Seq[VLink])
+    extends Externalizable {
   def this() = this(Seq.empty, Seq.empty)
 
   override def readExternal(in: ObjectInput): Unit = {
     val ver = in.readInt()
     if (ver != VisualisationData.VERSION) {
-      AE2Stuff.logWarn("Visualisation data version mismatch, expected %d, got %d - make sure client/server versions are not mismatched")
+      AE2Stuff.logWarn(
+        "Visualisation data version mismatch, expected %d, got %d - make sure client/server versions are not mismatched"
+      )
     } else {
       val nodeCount = in.readInt()
       val linkCount = in.readInt()
@@ -48,7 +56,12 @@ class VisualisationData(var nodes: Seq[VNode], var links: Seq[VLink]) extends Ex
         val n2 = in.readInt()
         val c = in.readByte()
         val f = in.readByte()
-        VLink(nodes(n1), nodes(n2), c, VLinkFlags.ValueSet.fromBitMask(Array(f.toLong)))
+        VLink(
+          nodes(n1),
+          nodes(n2),
+          c,
+          VLinkFlags.ValueSet.fromBitMask(Array(f.toLong))
+        )
       }
     }
   }

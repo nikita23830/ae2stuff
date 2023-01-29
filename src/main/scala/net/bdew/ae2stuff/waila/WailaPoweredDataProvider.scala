@@ -19,22 +19,43 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraft.world.World
 
 object WailaPoweredDataProvider extends BaseDataProvider(classOf[PoweredTile]) {
-  override def getNBTTag(player: EntityPlayerMP, te: PoweredTile, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound = {
+  override def getNBTTag(
+      player: EntityPlayerMP,
+      te: PoweredTile,
+      tag: NBTTagCompound,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int
+  ): NBTTagCompound = {
     tag.setDouble("waila_power_stored", te.powerStored)
     tag.setDouble("waila_power_capacity", te.powerCapacity)
     tag.setBoolean("waila_power_sleep", te.isSleeping)
     tag
   }
 
-  override def getBodyStrings(target: PoweredTile, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = {
+  override def getBodyStrings(
+      target: PoweredTile,
+      stack: ItemStack,
+      acc: IWailaDataAccessor,
+      cfg: IWailaConfigHandler
+  ): Iterable[String] = {
     val nbt = acc.getNBTData
     if (nbt.hasKey("waila_power_stored")) {
       List(
-        Misc.toLocalF("ae2stuff.waila.power", DecFormat.short(nbt.getDouble("waila_power_stored")), DecFormat.short(nbt.getDouble("waila_power_capacity"))),
+        Misc.toLocalF(
+          "ae2stuff.waila.power",
+          DecFormat.short(nbt.getDouble("waila_power_stored")),
+          DecFormat.short(nbt.getDouble("waila_power_capacity"))
+        ),
         if (nbt.getBoolean("waila_power_sleep"))
-          EnumChatFormatting.RED + Misc.toLocal("ae2stuff.waila.sleep.true") + EnumChatFormatting.RESET
+          EnumChatFormatting.RED + Misc.toLocal(
+            "ae2stuff.waila.sleep.true"
+          ) + EnumChatFormatting.RESET
         else
-          EnumChatFormatting.GREEN + Misc.toLocal("ae2stuff.waila.sleep.false") + EnumChatFormatting.RESET
+          EnumChatFormatting.GREEN + Misc.toLocal(
+            "ae2stuff.waila.sleep.false"
+          ) + EnumChatFormatting.RESET
       )
     } else List.empty
   }

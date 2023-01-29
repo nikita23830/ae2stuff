@@ -43,25 +43,35 @@ object OverlayRenderHandler {
         renderer.doRender(ev.partialTicks)
       } catch {
         case t: Throwable =>
-          AE2Stuff.logErrorException("Error in overlay renderer %s", t, renderer)
+          AE2Stuff.logErrorException(
+            "Error in overlay renderer %s",
+            t,
+            renderer
+          )
       }
     }
 
     GL11.glPopMatrix()
   }
 
-  def renderFloatingText(text: String, x: Double, y: Double, z: Double, color: Int): Unit = {
+  def renderFloatingText(
+      text: String,
+      x: Double,
+      y: Double,
+      z: Double,
+      color: Int
+  ): Unit = {
     val renderManager = RenderManager.instance
     val fontRenderer = Client.fontRenderer
     val tessellator = Tessellator.instance
 
-    val scale = 0.027F
+    val scale = 0.027f
     GL11.glColor4f(1f, 1f, 1f, 0.5f)
     GL11.glPushMatrix()
     GL11.glTranslated(x, y, z)
-    GL11.glNormal3f(0.0F, 1.0F, 0.0F)
-    GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
-    GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+    GL11.glNormal3f(0.0f, 1.0f, 0.0f)
+    GL11.glRotatef(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+    GL11.glRotatef(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
     GL11.glScalef(-scale, -scale, scale)
     GL11.glDisable(GL11.GL_LIGHTING)
     GL11.glDepthMask(false)
@@ -74,21 +84,31 @@ object OverlayRenderHandler {
     GL11.glDisable(GL11.GL_TEXTURE_2D)
     tessellator.startDrawingQuads()
     val stringMiddle = fontRenderer.getStringWidth(text) / 2
-    tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.5F)
-    tessellator.addVertex(-stringMiddle - 1, -1 + yOffset, 0.0D)
-    tessellator.addVertex(-stringMiddle - 1, 8 + yOffset, 0.0D)
-    tessellator.addVertex(stringMiddle + 1, 8 + yOffset, 0.0D)
-    tessellator.addVertex(stringMiddle + 1, -1 + yOffset, 0.0D)
+    tessellator.setColorRGBA_F(0.0f, 0.0f, 0.0f, 0.5f)
+    tessellator.addVertex(-stringMiddle - 1, -1 + yOffset, 0.0d)
+    tessellator.addVertex(-stringMiddle - 1, 8 + yOffset, 0.0d)
+    tessellator.addVertex(stringMiddle + 1, 8 + yOffset, 0.0d)
+    tessellator.addVertex(stringMiddle + 1, -1 + yOffset, 0.0d)
     tessellator.draw()
     GL11.glEnable(GL11.GL_TEXTURE_2D)
     GL11.glColor4f(1f, 1f, 1f, 0.5f)
-    fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2, yOffset, color)
+    fontRenderer.drawString(
+      text,
+      -fontRenderer.getStringWidth(text) / 2,
+      yOffset,
+      color
+    )
     GL11.glEnable(GL11.GL_DEPTH_TEST)
     GL11.glDepthMask(true)
-    fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2, yOffset, color)
+    fontRenderer.drawString(
+      text,
+      -fontRenderer.getStringWidth(text) / 2,
+      yOffset,
+      color
+    )
     GL11.glEnable(GL11.GL_LIGHTING)
     GL11.glDisable(GL11.GL_BLEND)
-    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F)
+    GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
     GL11.glPopMatrix()
   }
 }

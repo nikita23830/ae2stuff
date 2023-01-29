@@ -23,10 +23,22 @@ trait ContainerUpgradeable extends BaseContainer {
   var netToolObj: Option[INetworkTool] = None
   var upgradeInventory: IInventory = null
 
-  def initUpgradeable(te: TileEntity, upgradeInventory: IInventory, player: EntityPlayer, baseX: Int, baseY: Int, astc: (Slot) => Unit): Unit = {
+  def initUpgradeable(
+      te: TileEntity,
+      upgradeInventory: IInventory,
+      player: EntityPlayer,
+      baseX: Int,
+      baseY: Int,
+      astc: (Slot) => Unit
+  ): Unit = {
     this.upgradeInventory = upgradeInventory
     netToolSlot = UpgradeableHelper.findNetworktoolStack(player)
-    netToolObj = netToolSlot map (x => UpgradeableHelper.getNetworkToolObj(player.inventory.getStackInSlot(x), te))
+    netToolObj = netToolSlot map (x =>
+      UpgradeableHelper.getNetworkToolObj(
+        player.inventory.getStackInSlot(x),
+        te
+      )
+    )
 
     netToolObj foreach { nt =>
       for (i <- 0 until 3; j <- 0 until 3) {
@@ -37,19 +49,48 @@ trait ContainerUpgradeable extends BaseContainer {
 
   def hasToolbox = netToolObj.isDefined
 
-  override def transferStackInSlot(player: EntityPlayer, slot: Int): ItemStack = {
+  override def transferStackInSlot(
+      player: EntityPlayer,
+      slot: Int
+  ): ItemStack = {
     val stack = getSlot(slot).getStack
     if (netToolObj.contains(getSlot(slot).inventory)) {
       // Moving from the net tool - move into upgrades inv
-      getSlot(slot).putStack(ItemUtils.addStackToSlots(stack, upgradeInventory, 0 until upgradeInventory.getSizeInventory, true))
-    } else if (stack != null && stack.getItem.isInstanceOf[IUpgradeModule] && stack.getItem.asInstanceOf[IUpgradeModule].getType(stack) != null) {
+      getSlot(slot).putStack(
+        ItemUtils.addStackToSlots(
+          stack,
+          upgradeInventory,
+          0 until upgradeInventory.getSizeInventory,
+          true
+        )
+      )
+    } else if (
+      stack != null && stack.getItem
+        .isInstanceOf[IUpgradeModule] && stack.getItem
+        .asInstanceOf[IUpgradeModule]
+        .getType(stack) != null
+    ) {
       // Is an upgrade
       if (getSlot(slot).inventory != upgradeInventory) {
         // If it's not in upgrade inventory try to move it there
-        getSlot(slot).putStack(ItemUtils.addStackToSlots(stack, upgradeInventory, 0 until upgradeInventory.getSizeInventory, true))
+        getSlot(slot).putStack(
+          ItemUtils.addStackToSlots(
+            stack,
+            upgradeInventory,
+            0 until upgradeInventory.getSizeInventory,
+            true
+          )
+        )
       } else if (netToolObj.isDefined) {
         // Otherwise if we have a network tool, move it there
-        getSlot(slot).putStack(ItemUtils.addStackToSlots(stack, netToolObj.get, 0 until netToolObj.get.getSizeInventory, true))
+        getSlot(slot).putStack(
+          ItemUtils.addStackToSlots(
+            stack,
+            netToolObj.get,
+            0 until netToolObj.get.getSizeInventory,
+            true
+          )
+        )
       } else {
         // Otherwise let the default handler move it to player inventory
         super.transferStackInSlot(player, slot)
@@ -61,8 +102,15 @@ trait ContainerUpgradeable extends BaseContainer {
     null
   }
 
-  override def slotClick(slotNum: Int, button: Int, modifiers: Int, player: EntityPlayer): ItemStack = {
-    if (slotNum > 0 && slotNum < inventorySlots.size() && netToolSlot.isDefined) {
+  override def slotClick(
+      slotNum: Int,
+      button: Int,
+      modifiers: Int,
+      player: EntityPlayer
+  ): ItemStack = {
+    if (
+      slotNum > 0 && slotNum < inventorySlots.size() && netToolSlot.isDefined
+    ) {
       val slot = getSlot(slotNum)
       if (slot.isSlotInInventory(player.inventory, netToolSlot.get))
         return null

@@ -19,7 +19,9 @@ import net.bdew.lib.machine.Machine
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 
-object MachineInscriber extends Machine("Inscriber", BlockInscriber) with GuiProvider {
+object MachineInscriber
+    extends Machine("Inscriber", BlockInscriber)
+    with GuiProvider {
   override def guiId = 3
   override type TEClass = TileInscriber
 
@@ -33,18 +35,22 @@ object MachineInscriber extends Machine("Inscriber", BlockInscriber) with GuiPro
     Upgrades.SPEED.registerItem(new ItemStack(BlockInscriber), 5)
   }
 
-  NetHandler.regServerHandler {
-    case (MsgSetLock(slot, lock), player) =>
-      Misc.asInstanceOpt(player.openContainer, classOf[ContainerInscriber]).foreach { cont =>
+  NetHandler.regServerHandler { case (MsgSetLock(slot, lock), player) =>
+    Misc
+      .asInstanceOpt(player.openContainer, classOf[ContainerInscriber])
+      .foreach { cont =>
         slot match {
-          case "top" => cont.te.topLocked := lock
+          case "top"    => cont.te.topLocked := lock
           case "bottom" => cont.te.bottomLocked := lock
-          case _ => sys.error("Invalid slot")
+          case _        => sys.error("Invalid slot")
         }
       }
   }
 
   @SideOnly(Side.CLIENT)
-  override def getGui(te: TEClass, player: EntityPlayer) = new GuiInscriber(new ContainerInscriber(te, player))
-  override def getContainer(te: TEClass, player: EntityPlayer) = new ContainerInscriber(te, player)
+  override def getGui(te: TEClass, player: EntityPlayer) = new GuiInscriber(
+    new ContainerInscriber(te, player)
+  )
+  override def getContainer(te: TEClass, player: EntityPlayer) =
+    new ContainerInscriber(te, player)
 }

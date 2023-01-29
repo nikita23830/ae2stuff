@@ -14,8 +14,20 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 
 trait WrenchHandler {
-  def canWrench(player: EntityPlayer, stack: ItemStack, x: Int, y: Int, z: Int): Boolean
-  def doWrench(player: EntityPlayer, stack: ItemStack, x: Int, y: Int, z: Int): Unit
+  def canWrench(
+      player: EntityPlayer,
+      stack: ItemStack,
+      x: Int,
+      y: Int,
+      z: Int
+  ): Boolean
+  def doWrench(
+      player: EntityPlayer,
+      stack: ItemStack,
+      x: Int,
+      y: Int,
+      z: Int
+  ): Unit
 }
 
 object WrenchRegistry {
@@ -27,6 +39,12 @@ object WrenchRegistry {
       registry :+= BCWrenchHandler
   }
 
-  def findWrench(player: EntityPlayer, stack: ItemStack, x: Int, y: Int, z: Int) =
+  def findWrench(
+      player: EntityPlayer,
+      stack: ItemStack,
+      x: Int,
+      y: Int,
+      z: Int
+  ) =
     registry.find(_.canWrench(player, stack, x, y, z))
 }

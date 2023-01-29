@@ -17,7 +17,10 @@ import net.bdew.lib.machine.{Machine, PoweredMachine}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 
-object MachineGrower extends Machine("Grower", BlockGrower) with GuiProvider with PoweredMachine {
+object MachineGrower
+    extends Machine("Grower", BlockGrower)
+    with GuiProvider
+    with PoweredMachine {
   override def guiId = 2
   override type TEClass = TileGrower
 
@@ -32,6 +35,9 @@ object MachineGrower extends Machine("Grower", BlockGrower) with GuiProvider wit
   }
 
   @SideOnly(Side.CLIENT)
-  override def getGui(te: TEClass, player: EntityPlayer) = new GuiGrower(new ContainerGrower(te, player))
-  override def getContainer(te: TEClass, player: EntityPlayer) = new ContainerGrower(te, player)
+  override def getGui(te: TEClass, player: EntityPlayer) = new GuiGrower(
+    new ContainerGrower(te, player)
+  )
+  override def getContainer(te: TEClass, player: EntityPlayer) =
+    new ContainerGrower(te, player)
 }

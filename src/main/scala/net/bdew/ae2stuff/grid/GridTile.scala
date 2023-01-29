@@ -94,7 +94,13 @@ trait GridTile extends TileExtended with IGridHost with IGridBlock {
   override def getGridNode(p1: ForgeDirection) = getNode
   override def getCableConnectionType(p1: ForgeDirection) = AECableType.COVERED
   override def securityBreak() = {
-    ItemUtils.throwItemAt(getWorldObj, xCoord, yCoord, zCoord, new ItemStack(getBlockType))
+    ItemUtils.throwItemAt(
+      getWorldObj,
+      xCoord,
+      yCoord,
+      zCoord,
+      new ItemStack(getBlockType)
+    )
     if (this.isInstanceOf[BreakableInventoryTile])
       this.asInstanceOf[BreakableInventoryTile].dropItems()
     getWorldObj.setBlockToAir(xCoord, yCoord, zCoord)

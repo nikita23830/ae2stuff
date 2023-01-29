@@ -9,18 +9,26 @@
 
 package net.bdew.ae2stuff.network
 
-import net.bdew.ae2stuff.items.visualiser.{VisualisationData, VisualisationModes}
+import net.bdew.ae2stuff.items.visualiser.{
+  VisualisationData,
+  VisualisationModes
+}
 import net.bdew.lib.network.{ItemStackSerialize, NBTTagCompoundSerialize}
 
 @deprecated("Use MsgSetRecipe2 instead", "AE2Stuff 0.4")
-case class MsgSetRecipe(recipe: Map[Int, ItemStackSerialize]) extends NetHandler.Message
+case class MsgSetRecipe(recipe: Map[Int, ItemStackSerialize])
+    extends NetHandler.Message
 
-case class MsgSetRecipe2(recipe: Map[Int, List[ItemStackSerialize]]) extends NetHandler.Message
+case class MsgSetRecipe2(recipe: Map[Int, List[ItemStackSerialize]])
+    extends NetHandler.Message
 
-case class MsgSetRecipe3(recipe: NBTTagCompoundSerialize) extends NetHandler.Message
+case class MsgSetRecipe3(recipe: NBTTagCompoundSerialize)
+    extends NetHandler.Message
 
 case class MsgSetLock(slot: String, lock: Boolean) extends NetHandler.Message
 
-case class MsgVisualisationData(data: VisualisationData) extends NetHandler.Message
+case class MsgVisualisationData(data: VisualisationData)
+    extends NetHandler.Message
 
-case class MsgVisualisationMode(mode: VisualisationModes.Value) extends NetHandler.Message
+case class MsgVisualisationMode(mode: VisualisationModes.Value)
+    extends NetHandler.Message

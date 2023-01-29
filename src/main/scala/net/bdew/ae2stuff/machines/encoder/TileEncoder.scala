@@ -11,7 +11,10 @@ package net.bdew.ae2stuff.machines.encoder
 
 import java.util
 
-import appeng.api.networking.events.{MENetworkEventSubscribe, MENetworkPowerStatusChange}
+import appeng.api.networking.events.{
+  MENetworkEventSubscribe,
+  MENetworkPowerStatusChange
+}
 import appeng.api.networking.storage.IStorageGrid
 import appeng.util.item.AEItemStack
 import net.bdew.ae2stuff.AE2Defs
@@ -27,7 +30,13 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.oredict.OreDictionary
 
-class TileEncoder extends TileExtended with GridTile with PersistentInventoryTile with SidedInventory with RotatableTile with TileKeepData {
+class TileEncoder
+    extends TileExtended
+    with GridTile
+    with PersistentInventoryTile
+    with SidedInventory
+    with RotatableTile
+    with TileKeepData {
   override def getSizeInventory = 12
 
   object slots {
@@ -46,24 +55,30 @@ class TileEncoder extends TileExtended with GridTile with PersistentInventoryTil
 
   override def markDirty() {
     if (!worldObj.isRemote)
-      inv(slots.encoded) = encodePattern() // direct to prevent an infinite recursion
+      inv(slots.encoded) =
+        encodePattern() // direct to prevent an infinite recursion
     super.markDirty()
   }
 
   def encodePattern(): ItemStack = {
-    if (getResult == null || !getRecipe.exists(_ != null) || getStackInSlot(slots.patterns) == null)
+    if (
+      getResult == null || !getRecipe
+        .exists(_ != null) || getStackInSlot(slots.patterns) == null
+    )
       return null
 
     val newStack = new ItemStack(encodedPattern)
 
     newStack.setTagCompound(
       NBT(
-        "in" -> getRecipe.map(x =>
-          if (x == null)
-            new NBTTagCompound
-          else
-            NBT.from(x.writeToNBT _)
-        ).toList,
+        "in" -> getRecipe
+          .map(x =>
+            if (x == null)
+              new NBTTagCompound
+            else
+              NBT.from(x.writeToNBT _)
+          )
+          .toList,
         "out" -> List(getResult),
         "crafting" -> true
       )
@@ -77,13 +92,19 @@ class TileEncoder extends TileExtended with GridTile with PersistentInventoryTil
 
     // This is a hack to fix various borked NEI handlers, e.g. IC2
     var allStacks = stacks
-    for (x <- stacks if x.getItemDamage == OreDictionary.WILDCARD_VALUE && x.getMaxDamage < x.getItemDamage) {
+    for (
+      x <- stacks
+      if x.getItemDamage == OreDictionary.WILDCARD_VALUE && x.getMaxDamage < x.getItemDamage
+    ) {
       val toAdd = new util.ArrayList[ItemStack]()
       x.getItem.getSubItems(x.getItem, null, toAdd)
       allStacks = toAdd.toList ++ allStacks
     }
 
-    val storage = node.getGrid.getCache[IStorageGrid](classOf[IStorageGrid]).getItemInventory.getStorageList
+    val storage = node.getGrid
+      .getCache[IStorageGrid](classOf[IStorageGrid])
+      .getItemInventory
+      .getStorageList
 
     for {
       stack <- allStacks
@@ -122,5 +143,14 @@ class TileEncoder extends TileExtended with GridTile with PersistentInventoryTil
     }
   }
 
-  override def shouldRefresh(oldBlock: Block, newBlock: Block, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) = oldBlock != newBlock
+  override def shouldRefresh(
+      oldBlock: Block,
+      newBlock: Block,
+      oldMeta: Int,
+      newMeta: Int,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int
+  ) = oldBlock != newBlock
 }

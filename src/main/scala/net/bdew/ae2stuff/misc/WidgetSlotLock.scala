@@ -17,7 +17,8 @@ import net.bdew.lib.gui.{Point, Rect}
 
 import scala.collection.mutable
 
-case class WidgetSlotLock(rect: Rect, state: DataSlotBoolean, slot: String) extends Widget {
+case class WidgetSlotLock(rect: Rect, state: DataSlotBoolean, slot: String)
+    extends Widget {
   override def draw(mouse: Point): Unit = {
     if (state)
       parent.drawTexture(rect, Icons.lockOn)
@@ -25,7 +26,10 @@ case class WidgetSlotLock(rect: Rect, state: DataSlotBoolean, slot: String) exte
       parent.drawTexture(rect, Icons.lockOff)
   }
 
-  override def handleTooltip(p: Point, tip: mutable.MutableList[String]): Unit = {
+  override def handleTooltip(
+      p: Point,
+      tip: mutable.MutableList[String]
+  ): Unit = {
     if (state) {
       tip += Misc.toLocal("ae2stuff.gui.lock.on")
     } else {

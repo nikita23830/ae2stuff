@@ -16,7 +16,11 @@ import net.bdew.ae2stuff.machines.encoder.GuiEncoder
 class NEI_AE2Stuff_Config extends IConfigureNEI {
   override def loadConfig() {
     GuiInfo.customSlotGuis.add(classOf[GuiEncoder])
-    API.registerGuiOverlayHandler(classOf[GuiEncoder], EncoderOverlayHandler, "crafting")
+    API.registerGuiOverlayHandler(
+      classOf[GuiEncoder],
+      EncoderOverlayHandler,
+      "crafting"
+    )
     GuiContainerManager.addTooltipHandler(InscriberGuiHandler)
     GuiContainerManager.addInputHandler(InscriberGuiHandler)
   }

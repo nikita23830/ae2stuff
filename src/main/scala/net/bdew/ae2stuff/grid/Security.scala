@@ -17,11 +17,19 @@ import com.mojang.authlib.GameProfile
 import net.minecraft.entity.player.EntityPlayer
 
 object Security {
-  def getPlayerId(p: GameProfile): Int = AEApi.instance().registries().players().getID(p)
-  def getPlayerId(e: EntityPlayer): Int = AEApi.instance().registries().players().getID(e)
-  def getPlayerFromId(id: Int): Option[EntityPlayer] = Option(AEApi.instance().registries().players().findPlayer(id))
+  def getPlayerId(p: GameProfile): Int =
+    AEApi.instance().registries().players().getID(p)
+  def getPlayerId(e: EntityPlayer): Int =
+    AEApi.instance().registries().players().getID(e)
+  def getPlayerFromId(id: Int): Option[EntityPlayer] = Option(
+    AEApi.instance().registries().players().findPlayer(id)
+  )
 
-  def playerHasPermission(grid: IGrid, playerID: Int, permission: SecurityPermissions): Boolean = {
+  def playerHasPermission(
+      grid: IGrid,
+      playerID: Int,
+      permission: SecurityPermissions
+  ): Boolean = {
     if (grid == null) return true
     val gs = grid.getCache[ISecurityGrid](classOf[ISecurityGrid])
     if (gs == null || !gs.isAvailable) return true

@@ -25,7 +25,13 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 
-class TileInscriber extends TileDataSlots with GridTile with SidedInventory with PersistentInventoryTile with PoweredTile with TileKeepData {
+class TileInscriber
+    extends TileDataSlots
+    with GridTile
+    with SidedInventory
+    with PersistentInventoryTile
+    with PoweredTile
+    with TileKeepData {
   override def getSizeInventory = 4
   override def getMachineRepresentation = new ItemStack(BlockInscriber)
   override def powerCapacity = MachineInscriber.powerCapacity
@@ -38,11 +44,14 @@ class TileInscriber extends TileDataSlots with GridTile with SidedInventory with
   }
 
   val upgrades = new UpgradeInventory("upgrades", this, 5, Set(Upgrades.SPEED))
-  val progress = DataSlotFloat("progress", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
+  val progress =
+    DataSlotFloat("progress", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
   val output = DataSlotItemStack("output", this).setUpdate(UpdateKind.SAVE)
 
-  val topLocked = DataSlotBoolean("topLocked", this, true).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
-  val bottomLocked = DataSlotBoolean("bottomLocked", this, true).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
+  val topLocked = DataSlotBoolean("topLocked", this, true)
+    .setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
+  val bottomLocked = DataSlotBoolean("bottomLocked", this, true)
+    .setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
 
   persistLoad.listen(tag => {
     // This forces the values to be true when loading from older versions
@@ -72,7 +81,10 @@ class TileInscriber extends TileDataSlots with GridTile with SidedInventory with
         // Have something to do
         if (progress < 1) {
           // Not finished - try progressing
-          val progressPerTick = (1F / MachineInscriber.cycleTicks) * (1 + upgrades.cards(Upgrades.SPEED))
+          val progressPerTick =
+            (1f / MachineInscriber.cycleTicks) * (1 + upgrades.cards(
+              Upgrades.SPEED
+            ))
           val powerNeeded = MachineInscriber.cyclePower * progressPerTick
           if (powerStored >= powerNeeded) {
             // Have enough power - consume it and add to progress
@@ -86,7 +98,12 @@ class TileInscriber extends TileDataSlots with GridTile with SidedInventory with
         if (progress >= 1) {
           // Finished - try to output
           val oStack = getStackInSlot(slots.output)
-          if (oStack == null || (ItemUtils.isSameItem(oStack, output) && oStack.stackSize + output.stackSize <= oStack.getMaxStackSize)) {
+          if (
+            oStack == null || (ItemUtils.isSameItem(
+              oStack,
+              output
+            ) && oStack.stackSize + output.stackSize <= oStack.getMaxStackSize)
+          ) {
             // Can output - finish process
             if (oStack == null) {
               setInventorySlotContents(slots.output, output)
@@ -125,47 +142,107 @@ class TileInscriber extends TileDataSlots with GridTile with SidedInventory with
   import scala.collection.JavaConversions._
 
   def findFinalRecipe: Option[IInscriberRecipe] =
-    AEApi.instance().registries().inscriber().getRecipes find isMatchingFullRecipe
+    AEApi
+      .instance()
+      .registries()
+      .inscriber()
+      .getRecipes find isMatchingFullRecipe
 
-  def isMatchingFullRecipe(rec: IInscriberRecipe) = getStackInSlot(slots.middle) != null &&
-    ItemUtils.isSameItem(rec.getTopOptional.orNull(), getStackInSlot(slots.top)) &&
-    ItemUtils.isSameItem(rec.getBottomOptional.orNull(), getStackInSlot(slots.bottom)) &&
-    rec.getInputs.exists(rs => ItemUtils.isSameItem(rs, getStackInSlot(slots.middle)))
+  def isMatchingFullRecipe(rec: IInscriberRecipe) =
+    getStackInSlot(slots.middle) != null &&
+      ItemUtils.isSameItem(
+        rec.getTopOptional.orNull(),
+        getStackInSlot(slots.top)
+      ) &&
+      ItemUtils.isSameItem(
+        rec.getBottomOptional.orNull(),
+        getStackInSlot(slots.bottom)
+      ) &&
+      rec.getInputs.exists(rs =>
+        ItemUtils.isSameItem(rs, getStackInSlot(slots.middle))
+      )
 
-  def isMatchingPartialRecipe(rec: IInscriberRecipe, top: Option[ItemStack], middle: Option[ItemStack], bottom: Option[ItemStack]): Boolean = {
+  def isMatchingPartialRecipe(
+      rec: IInscriberRecipe,
+      top: Option[ItemStack],
+      middle: Option[ItemStack],
+      bottom: Option[ItemStack]
+  ): Boolean = {
     if (top.isDefined) {
       if (!rec.getTopOptional.isPresent) return false
       if (!ItemUtils.isSameItem(rec.getTopOptional.get(), top.get)) return false
     }
     if (middle.isDefined) {
-      if (!rec.getInputs.exists(rs => ItemUtils.isSameItem(rs, middle.get))) return false
+      if (!rec.getInputs.exists(rs => ItemUtils.isSameItem(rs, middle.get)))
+        return false
     }
     if (bottom.isDefined) {
       if (!rec.getBottomOptional.isPresent) return false
-      if (!ItemUtils.isSameItem(rec.getBottomOptional.get(), bottom.get)) return false
+      if (!ItemUtils.isSameItem(rec.getBottomOptional.get(), bottom.get))
+        return false
     }
     true
   }
 
-  def isValidPartialRecipe(top: Option[ItemStack], middle: Option[ItemStack], bottom: Option[ItemStack]): Boolean = {
-    AEApi.instance().registries().inscriber().getRecipes.exists(rec => isMatchingPartialRecipe(rec, top, middle, bottom))
+  def isValidPartialRecipe(
+      top: Option[ItemStack],
+      middle: Option[ItemStack],
+      bottom: Option[ItemStack]
+  ): Boolean = {
+    AEApi
+      .instance()
+      .registries()
+      .inscriber()
+      .getRecipes
+      .exists(rec => isMatchingPartialRecipe(rec, top, middle, bottom))
   }
 
   override def isItemValidForSlot(slot: Int, stack: ItemStack) = slot match {
-    case slots.top => isValidPartialRecipe(Some(stack), Option(inv(slots.middle)), Option(inv(slots.bottom)))
-    case slots.middle => isValidPartialRecipe(Option(inv(slots.top)), Some(stack), Option(inv(slots.bottom)))
-    case slots.bottom => isValidPartialRecipe(Option(inv(slots.top)), Option(inv(slots.middle)), Some(stack))
+    case slots.top =>
+      isValidPartialRecipe(
+        Some(stack),
+        Option(inv(slots.middle)),
+        Option(inv(slots.bottom))
+      )
+    case slots.middle =>
+      isValidPartialRecipe(
+        Option(inv(slots.top)),
+        Some(stack),
+        Option(inv(slots.bottom))
+      )
+    case slots.bottom =>
+      isValidPartialRecipe(
+        Option(inv(slots.top)),
+        Option(inv(slots.middle)),
+        Some(stack)
+      )
     case _ => false
   }
 
-  override def canExtractItem(slot: Int, stack: ItemStack, side: Int) = slot match {
-    case slots.output => true
-    case slots.top => (!topLocked) && (output :== null) && inv(slots.middle) == null
-    case slots.bottom => (!bottomLocked) && (output :== null) && inv(slots.middle) == null
-    case _ => false
-  }
+  override def canExtractItem(slot: Int, stack: ItemStack, side: Int) =
+    slot match {
+      case slots.output => true
+      case slots.top =>
+        (!topLocked) && (output :== null) && inv(slots.middle) == null
+      case slots.bottom =>
+        (!bottomLocked) && (output :== null) && inv(slots.middle) == null
+      case _ => false
+    }
 
-  override def shouldRefresh(oldBlock: Block, newBlock: Block, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) = oldBlock != newBlock
-  onWake.listen(() => worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3))
-  onSleep.listen(() => worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3))
+  override def shouldRefresh(
+      oldBlock: Block,
+      newBlock: Block,
+      oldMeta: Int,
+      newMeta: Int,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int
+  ) = oldBlock != newBlock
+  onWake.listen(() =>
+    worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3)
+  )
+  onSleep.listen(() =>
+    worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)
+  )
 }

@@ -21,15 +21,15 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
   val staticList = GL11.glGenLists(1)
   var needListRefresh = true
 
-  final val SIZE = 0.2D
+  final val SIZE = 0.2d
 
-  NetHandler.regClientHandler {
-    case MsgVisualisationData(data) =>
-      currentLinks = data
-      val (dense1, normal1) = currentLinks.links.partition(_.flags.contains(VLinkFlags.DENSE))
-      dense = dense1
-      normal = normal1
-      needListRefresh = true
+  NetHandler.regClientHandler { case MsgVisualisationData(data) =>
+    currentLinks = data
+    val (dense1, normal1) =
+      currentLinks.links.partition(_.flags.contains(VLinkFlags.DENSE))
+    dense = dense1
+    normal = normal1
+    needListRefresh = true
   }
 
   def setColor(rgb: (Double, Double, Double), mul: Double): Unit = {
@@ -42,44 +42,139 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
     for (node <- currentLinks.nodes) {
       val color =
         if (node.flags.contains(VNodeFlags.MISSING))
-          (1D, 0D, 0D)
+          (1d, 0d, 0d)
         else if (node.flags.contains(VNodeFlags.DENSE))
-          (1D, 1D, 0D)
+          (1d, 1d, 0d)
         else
-          (0D, 0D, 1D)
+          (0d, 0d, 1d)
 
-      setColor(color, 1D) // +Y
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D + SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D + SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D + SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D + SIZE, node.z + 0.5D - SIZE)
+      setColor(color, 1d) // +Y
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d - SIZE
+      )
 
-      setColor(color, 0.5D) // -Y
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D - SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D - SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D - SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D - SIZE, node.z + 0.5D - SIZE)
+      setColor(color, 0.5d) // -Y
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d - SIZE
+      )
 
+      setColor(color, 0.8d) // +/- Z
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d - SIZE
+      )
 
-      setColor(color, 0.8D) // +/- Z
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D - SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D + SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D + SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D - SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D + SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D + SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D - SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D - SIZE, node.z + 0.5D - SIZE)
-
-      setColor(color, 0.6D) // +/- X
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D + SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D + SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D - SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D + SIZE, node.y + 0.5D - SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D - SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D + SIZE, node.z + 0.5D + SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D + SIZE, node.z + 0.5D - SIZE)
-      GL11.glVertex3d(node.x + 0.5D - SIZE, node.y + 0.5D - SIZE, node.z + 0.5D - SIZE)
+      setColor(color, 0.6d) // +/- X
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d + SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d + SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d + SIZE,
+        node.z + 0.5d - SIZE
+      )
+      GL11.glVertex3d(
+        node.x + 0.5d - SIZE,
+        node.y + 0.5d - SIZE,
+        node.z + 0.5d - SIZE
+      )
     }
 
     GL11.glEnd()
@@ -89,7 +184,9 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
     GL11.glLineWidth(width)
     GL11.glBegin(GL11.GL_LINES)
 
-    for (link <- links if (!onlyP2P) || link.flags.contains(VLinkFlags.COMPRESSED)) {
+    for (
+      link <- links if (!onlyP2P) || link.flags.contains(VLinkFlags.COMPRESSED)
+    ) {
       if (link.flags.contains(VLinkFlags.COMPRESSED)) {
         GL11.glColor3f(1, 0, 1)
       } else if (link.flags.contains(VLinkFlags.DENSE)) {
@@ -98,15 +195,32 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
         GL11.glColor3f(0, 0, 1)
       }
 
-      GL11.glVertex3d(link.node1.x + 0.5D, link.node1.y + 0.5D, link.node1.z + 0.5D)
-      GL11.glVertex3d(link.node2.x + 0.5D, link.node2.y + 0.5D, link.node2.z + 0.5D)
+      GL11.glVertex3d(
+        link.node1.x + 0.5d,
+        link.node1.y + 0.5d,
+        link.node1.z + 0.5d
+      )
+      GL11.glVertex3d(
+        link.node2.x + 0.5d,
+        link.node2.y + 0.5d,
+        link.node2.z + 0.5d
+      )
     }
 
     GL11.glEnd()
   }
 
-  val renderNodesModes = Set(VisualisationModes.NODES, VisualisationModes.FULL, VisualisationModes.NONUM)
-  val renderLinksModes = Set(VisualisationModes.CHANNELS, VisualisationModes.FULL, VisualisationModes.NONUM, VisualisationModes.P2P)
+  val renderNodesModes = Set(
+    VisualisationModes.NODES,
+    VisualisationModes.FULL,
+    VisualisationModes.NONUM
+  )
+  val renderLinksModes = Set(
+    VisualisationModes.CHANNELS,
+    VisualisationModes.FULL,
+    VisualisationModes.NONUM,
+    VisualisationModes.P2P
+  )
 
   override def doRender(partialTicks: Float): Unit = {
     if (Client.player != null) {
@@ -132,8 +246,8 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
           GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
 
           if (renderLinksModes.contains(mode)) {
-            renderLinks(dense, 16F, mode == VisualisationModes.P2P)
-            renderLinks(normal, 4F, mode == VisualisationModes.P2P)
+            renderLinks(dense, 16f, mode == VisualisationModes.P2P)
+            renderLinks(normal, 4f, mode == VisualisationModes.P2P)
           }
 
           GL11.glEndList()
@@ -141,13 +255,17 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
 
         GL11.glCallList(staticList)
 
-
         // Labels are rendered every frame because they need to face the camera
 
         if (mode == VisualisationModes.FULL) {
           for (link <- currentLinks.links if link.channels > 0) {
-            OverlayRenderHandler.renderFloatingText(link.channels.toString,
-              (link.node1.x + link.node2.x) / 2D + 0.5D, (link.node1.y + link.node2.y) / 2D + 0.5D, (link.node1.z + link.node2.z) / 2D + 0.5D, 0xFFFFFF)
+            OverlayRenderHandler.renderFloatingText(
+              link.channels.toString,
+              (link.node1.x + link.node2.x) / 2d + 0.5d,
+              (link.node1.y + link.node2.y) / 2d + 0.5d,
+              (link.node1.z + link.node2.z) / 2d + 0.5d,
+              0xffffff
+            )
           }
         }
 

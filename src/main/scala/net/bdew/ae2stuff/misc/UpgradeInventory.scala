@@ -17,7 +17,12 @@ import net.bdew.lib.items.ItemUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
-class UpgradeInventory(name: String, parent: TileDataSlots, size: Int, kinds: Set[Upgrades]) extends DataSlotInventory(name, parent, size) {
+class UpgradeInventory(
+    name: String,
+    parent: TileDataSlots,
+    size: Int,
+    kinds: Set[Upgrades]
+) extends DataSlotInventory(name, parent, size) {
   override def getInventoryStackLimit() = 1
   override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean =
     if (stack != null && stack.getItem.isInstanceOf[IUpgradeModule])
@@ -46,7 +51,13 @@ class UpgradeInventory(name: String, parent: TileDataSlots, size: Int, kinds: Se
   def dropInventory(): Unit = {
     if (parent.getWorldObject != null && !parent.getWorldObj.isRemote) {
       for (stack <- inv if stack != null) {
-        ItemUtils.throwItemAt(parent.getWorldObj, parent.xCoord, parent.yCoord, parent.zCoord, stack)
+        ItemUtils.throwItemAt(
+          parent.getWorldObj,
+          parent.xCoord,
+          parent.yCoord,
+          parent.zCoord,
+          stack
+        )
       }
       inv = new Array[ItemStack](inv.length)
     }

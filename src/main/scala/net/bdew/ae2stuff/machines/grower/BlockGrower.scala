@@ -21,7 +21,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.world.World
 
-object BlockGrower extends SimpleBlock("Grower", MachineMaterial) with HasTE[TileGrower] with BlockWrenchable with BlockKeepData {
+object BlockGrower
+    extends SimpleBlock("Grower", MachineMaterial)
+    with HasTE[TileGrower]
+    with BlockWrenchable
+    with BlockKeepData {
   override val TEClass = classOf[TileGrower]
 
   setHardness(1)
@@ -41,12 +45,29 @@ object BlockGrower extends SimpleBlock("Grower", MachineMaterial) with HasTE[Til
     iconOff = reg.registerIcon(Misc.iconName(modId, name, "main_off"))
   }
 
-  override def onBlockActivatedReal(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, xOffs: Float, yOffs: Float, zOffs: Float): Boolean = {
+  override def onBlockActivatedReal(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityPlayer,
+      side: Int,
+      xOffs: Float,
+      yOffs: Float,
+      zOffs: Float
+  ): Boolean = {
     player.openGui(AE2Stuff, MachineGrower.guiId, world, x, y, z)
     true
   }
 
-  override def onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, player: EntityLivingBase, stack: ItemStack) {
+  override def onBlockPlacedBy(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityLivingBase,
+      stack: ItemStack
+  ) {
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
   }

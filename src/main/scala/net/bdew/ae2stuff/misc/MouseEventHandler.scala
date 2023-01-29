@@ -10,7 +10,11 @@
 package net.bdew.ae2stuff.misc
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.bdew.ae2stuff.items.visualiser.{ItemVisualiser, VisualisationModes, VisualiserOverlayRender}
+import net.bdew.ae2stuff.items.visualiser.{
+  ItemVisualiser,
+  VisualisationModes,
+  VisualiserOverlayRender
+}
 import net.bdew.ae2stuff.network.{MsgVisualisationMode, NetHandler}
 import net.bdew.lib.{Client, Misc}
 import net.minecraftforge.client.event.MouseEvent
@@ -32,9 +36,15 @@ object MouseEventHandler {
     if (stack.getItem == ItemVisualiser) {
       val newMode =
         if (ev.dwheel.signum > 0)
-          Misc.nextInSeq(VisualisationModes.modes, ItemVisualiser.getMode(stack))
+          Misc.nextInSeq(
+            VisualisationModes.modes,
+            ItemVisualiser.getMode(stack)
+          )
         else
-          Misc.prevInSeq(VisualisationModes.modes, ItemVisualiser.getMode(stack))
+          Misc.prevInSeq(
+            VisualisationModes.modes,
+            ItemVisualiser.getMode(stack)
+          )
       ItemVisualiser.setMode(stack, newMode)
       VisualiserOverlayRender.needListRefresh = true
       NetHandler.sendToServer(MsgVisualisationMode(newMode))

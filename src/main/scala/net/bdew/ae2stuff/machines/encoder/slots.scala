@@ -15,7 +15,14 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{IInventory, Slot}
 import net.minecraft.item.ItemStack
 
-class SlotFakeCrafting(inv: IInventory, slot: Int, x: Int, y: Int, onChanged: () => Unit) extends Slot(inv, slot, x, y) with SlotClickable {
+class SlotFakeCrafting(
+    inv: IInventory,
+    slot: Int,
+    x: Int,
+    y: Int,
+    onChanged: () => Unit
+) extends Slot(inv, slot, x, y)
+    with SlotClickable {
   override def canTakeStack(p: EntityPlayer) = false
   override def onClick(button: Int, mods: Int, player: EntityPlayer) = {
     val newStack = if (player.inventory.getItemStack != null) {
@@ -26,7 +33,9 @@ class SlotFakeCrafting(inv: IInventory, slot: Int, x: Int, y: Int, onChanged: ()
       null
     }
 
-    if (!ItemStack.areItemStacksEqual(newStack, inventory.getStackInSlot(slot))) {
+    if (
+      !ItemStack.areItemStacksEqual(newStack, inventory.getStackInSlot(slot))
+    ) {
       inventory.setInventorySlotContents(slot, newStack)
       onChanged()
     }
@@ -35,12 +44,15 @@ class SlotFakeCrafting(inv: IInventory, slot: Int, x: Int, y: Int, onChanged: ()
   }
 }
 
-class SlotFakeCraftingResult(inv: IInventory, slot: Int, x: Int, y: Int) extends Slot(inv, slot, x, y) {
+class SlotFakeCraftingResult(inv: IInventory, slot: Int, x: Int, y: Int)
+    extends Slot(inv, slot, x, y) {
   override def canTakeStack(p: EntityPlayer) = false
   override def isItemValid(s: ItemStack) = false
 }
 
-class SlotFakeEncodedPattern(inv: TileEncoder, slot: Int, x: Int, y: Int) extends Slot(inv, slot, x, y) with SlotClickable {
+class SlotFakeEncodedPattern(inv: TileEncoder, slot: Int, x: Int, y: Int)
+    extends Slot(inv, slot, x, y)
+    with SlotClickable {
   override def onClick(button: Int, mods: Int, player: EntityPlayer) = {
     val encoded = inv.getStackInSlot(slot)
     if (encoded != null) {
@@ -50,7 +62,14 @@ class SlotFakeEncodedPattern(inv: TileEncoder, slot: Int, x: Int, y: Int) extend
           inv.decrStackSize(inv.slots.patterns, 1)
         }
       } else if (mods == 1) {
-        if (ItemUtils.addStackToSlots(encoded.copy(), player.inventory, 0 until player.inventory.getSizeInventory, true) == null)
+        if (
+          ItemUtils.addStackToSlots(
+            encoded.copy(),
+            player.inventory,
+            0 until player.inventory.getSizeInventory,
+            true
+          ) == null
+        )
           inv.decrStackSize(inv.slots.patterns, 1)
       }
     }

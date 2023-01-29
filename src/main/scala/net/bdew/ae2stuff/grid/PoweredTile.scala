@@ -16,7 +16,11 @@ import net.bdew.lib.Misc
 import net.bdew.lib.data.DataSlotDouble
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 
-trait PoweredTile extends TileDataSlots with GridTile with SleepableTile with IAEPowerStorage {
+trait PoweredTile
+    extends TileDataSlots
+    with GridTile
+    with SleepableTile
+    with IAEPowerStorage {
   def powerCapacity: Double
 
   val powerStored = new DataSlotDouble("power", this).setUpdate(UpdateKind.SAVE)
@@ -25,12 +29,21 @@ trait PoweredTile extends TileDataSlots with GridTile with SleepableTile with IA
 
   def requestPowerIfNeeded(): Unit = {
     if (node != null && node.isActive) {
-      if (!postedReq && powerStored / powerCapacity < 0.9D) {
+      if (!postedReq && powerStored / powerCapacity < 0.9d) {
         postedReq = true
-        safePostEvent(new MENetworkPowerStorage(this, MENetworkPowerStorage.PowerEventType.REQUEST_POWER))
-      } else if (powerStored / powerCapacity < 0.5D) {
+        safePostEvent(
+          new MENetworkPowerStorage(
+            this,
+            MENetworkPowerStorage.PowerEventType.REQUEST_POWER
+          )
+        )
+      } else if (powerStored / powerCapacity < 0.5d) {
         val net = node.getGrid.getCache[IEnergyGrid](classOf[IEnergyGrid])
-        val drawn = net.extractAEPower(powerCapacity - powerStored, Actionable.MODULATE, PowerMultiplier.CONFIG)
+        val drawn = net.extractAEPower(
+          powerCapacity - powerStored,
+          Actionable.MODULATE,
+          PowerMultiplier.CONFIG
+        )
         if (drawn > 0) {
           powerStored += drawn
           wakeup()
@@ -43,7 +56,7 @@ trait PoweredTile extends TileDataSlots with GridTile with SleepableTile with IA
   override def getAEMaxPower: Double = powerCapacity
 
   override def injectAEPower(v: Double, actionable: Actionable): Double = {
-    val canStore = Misc.clamp(v, 0D, powerCapacity - powerStored)
+    val canStore = Misc.clamp(v, 0d, powerCapacity - powerStored)
     if (actionable == Actionable.MODULATE && canStore > 0) {
       powerStored += canStore
       postedReq = false
@@ -52,7 +65,11 @@ trait PoweredTile extends TileDataSlots with GridTile with SleepableTile with IA
     v - canStore
   }
 
-  override def extractAEPower(v: Double, actionable: Actionable, powerMultiplier: PowerMultiplier): Double = 0
+  override def extractAEPower(
+      v: Double,
+      actionable: Actionable,
+      powerMultiplier: PowerMultiplier
+  ): Double = 0
 
   override def getPowerFlow = AccessRestriction.WRITE
   override def isAEPublicPowerStorage = true

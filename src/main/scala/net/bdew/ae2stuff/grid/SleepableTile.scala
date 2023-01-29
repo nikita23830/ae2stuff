@@ -34,15 +34,28 @@ trait SleepableTile extends TileExtended {
   def isSleeping = sleeping
 
   def sleep(): Unit = {
-    if (TRACE && !sleeping) AE2Stuff.logInfo("SLEEP %s (%d,%d,%d)", getClass.getSimpleName, xCoord, yCoord, zCoord)
+    if (TRACE && !sleeping)
+      AE2Stuff.logInfo(
+        "SLEEP %s (%d,%d,%d)",
+        getClass.getSimpleName,
+        xCoord,
+        yCoord,
+        zCoord
+      )
     if (!sleeping) onSleep.trigger()
     sleeping = true
   }
 
   def wakeup(): Unit = {
-    if (TRACE && sleeping) AE2Stuff.logInfo("WAKEUP %s (%d,%d,%d)", getClass.getSimpleName, xCoord, yCoord, zCoord)
+    if (TRACE && sleeping)
+      AE2Stuff.logInfo(
+        "WAKEUP %s (%d,%d,%d)",
+        getClass.getSimpleName,
+        xCoord,
+        yCoord,
+        zCoord
+      )
     if (sleeping) onWake.trigger()
     sleeping = false
   }
 }
-

@@ -14,8 +14,17 @@ import java.io.{File, FileWriter}
 import appeng.api.definitions.IItemDefinition
 import appeng.api.util.{AEColor, AEColoredItemDefinition}
 import com.google.common.base.Optional
-import net.bdew.lib.recipes.gencfg.{ConfigSection, GenericConfigLoader, GenericConfigParser}
-import net.bdew.lib.recipes.{RecipeLoader, RecipeParser, RecipesHelper, StackRef}
+import net.bdew.lib.recipes.gencfg.{
+  ConfigSection,
+  GenericConfigLoader,
+  GenericConfigParser
+}
+import net.bdew.lib.recipes.{
+  RecipeLoader,
+  RecipeParser,
+  RecipesHelper,
+  StackRef
+}
 import net.minecraft.item.ItemStack
 
 object Tuning extends ConfigSection
@@ -31,7 +40,9 @@ object TuningLoader {
   class Parser extends RecipeParser with GenericConfigParser {
     def specMaterial = "M" ~> ":" ~> ident ^^ StackMaterial
     def specPart = "P" ~> ":" ~> ident ^^ StackPart
-    def specPartColored = "C" ~> ":" ~> ident ~ "/" ~ ident ^^ { case name ~ sl ~ color => StackPartColored(name, color) }
+    def specPartColored = "C" ~> ":" ~> ident ~ "/" ~ ident ^^ {
+      case name ~ sl ~ color => StackPartColored(name, color)
+    }
     override def spec = specMaterial | specPart | specPartColored | super.spec
   }
 
@@ -51,12 +62,21 @@ object TuningLoader {
 
     override def getConcreteStack(s: StackRef, cnt: Int) = s match {
       case StackMaterial(name) =>
-        getOptionalStack(AE2Defs.material(name).asInstanceOf[IItemDefinition].maybeStack(cnt), s.toString)
+        getOptionalStack(
+          AE2Defs.material(name).asInstanceOf[IItemDefinition].maybeStack(cnt),
+          s.toString
+        )
       case StackPart(name) =>
-        getOptionalStack(AE2Defs.part(name).asInstanceOf[IItemDefinition].maybeStack(cnt), s.toString)
+        getOptionalStack(
+          AE2Defs.part(name).asInstanceOf[IItemDefinition].maybeStack(cnt),
+          s.toString
+        )
       case StackPartColored(name, colorName) =>
         val color = AEColor.valueOf(colorName)
-        AE2Defs.part(name).asInstanceOf[AEColoredItemDefinition].stack(color, cnt)
+        AE2Defs
+          .part(name)
+          .asInstanceOf[AEColoredItemDefinition]
+          .stack(color, cnt)
       case _ => super.getConcreteStack(s, cnt)
     }
   }
@@ -68,8 +88,12 @@ object TuningLoader {
       AE2Stuff.configDir.mkdir()
       val nl = System.getProperty("line.separator")
       val f = new FileWriter(new File(AE2Stuff.configDir, "readme.txt"))
-      f.write("Any .cfg files in this directory will be loaded after the internal configuration, in alphabetic order" + nl)
-      f.write("Files in 'overrides' directory with matching names cab be used to override internal configuration" + nl)
+      f.write(
+        "Any .cfg files in this directory will be loaded after the internal configuration, in alphabetic order" + nl
+      )
+      f.write(
+        "Files in 'overrides' directory with matching names cab be used to override internal configuration" + nl
+      )
       f.close()
     }
 
@@ -78,7 +102,7 @@ object TuningLoader {
       listResource = "/assets/ae2stuff/config/files.lst",
       configDir = AE2Stuff.configDir,
       resBaseName = "/assets/ae2stuff/config/",
-      loader = loader)
+      loader = loader
+    )
   }
 }
-

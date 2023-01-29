@@ -14,7 +14,10 @@ import net.bdew.lib.data.base.ContainerDataSlots
 import net.bdew.lib.gui.{BaseContainer, SlotValidating}
 import net.minecraft.entity.player.EntityPlayer
 
-class ContainerInscriber(val te: TileInscriber, player: EntityPlayer) extends BaseContainer(te) with ContainerDataSlots with ContainerUpgradeable {
+class ContainerInscriber(val te: TileInscriber, player: EntityPlayer)
+    extends BaseContainer(te)
+    with ContainerDataSlots
+    with ContainerUpgradeable {
   override lazy val dataSource = te
 
   addSlotToContainer(new SlotValidating(te, te.slots.top, 45, 16))

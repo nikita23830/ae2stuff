@@ -13,7 +13,7 @@ import appeng.api.networking.events.MENetworkPowerIdleChange
 import net.bdew.lib.tile.TileExtended
 
 trait VariableIdlePower extends TileExtended with GridTile {
-  private var currentPowerUsage = 0D
+  private var currentPowerUsage = 0d
 
   persistSave.listen(tag => tag.setDouble("_poweruse", currentPowerUsage))
   persistLoad.listen(tag => setIdlePowerUse(tag.getDouble("_poweruse")))
