@@ -86,14 +86,16 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
       )
       this.setIdlePowerUse(power)
       that.setIdlePowerUse(power)
-      worldObj.setBlockMetadataWithNotify(
+      if (worldObj.blockExists(xCoord, yCoord, zCoord))
+        worldObj.setBlockMetadataWithNotify(
         this.xCoord,
         this.yCoord,
         this.zCoord,
         1,
         3
       )
-      worldObj.setBlockMetadataWithNotify(
+      if (worldObj.blockExists(that.xCoord, that.yCoord, that.zCoord))
+        worldObj.setBlockMetadataWithNotify(
         that.xCoord,
         that.yCoord,
         that.zCoord,
@@ -113,7 +115,8 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
     getLink foreach { other =>
       other.connection = null
       other.setIdlePowerUse(0d)
-      worldObj.setBlockMetadataWithNotify(
+      if (worldObj.blockExists(other.xCoord, other.yCoord, other.zCoord))
+        worldObj.setBlockMetadataWithNotify(
         other.xCoord,
         other.yCoord,
         other.zCoord,
@@ -121,7 +124,8 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
         3
       )
     }
-    worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)
+    if (worldObj.blockExists(xCoord, yCoord, zCoord))
+      worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)
   }
 
   override def getMachineRepresentation: ItemStack = new ItemStack(
