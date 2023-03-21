@@ -137,9 +137,11 @@ class TileEncoder
 
   @MENetworkEventSubscribe
   def networkPowerStatusChange(ev: MENetworkPowerStatusChange): Unit = {
-    val newMeta = if (node.isActive) 1 else 0
-    if (newMeta != worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
-      worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3)
+    if (worldObj.blockExists(xCoord, yCoord, zCoord)) {
+      val newMeta = if (node.isActive) 1 else 0
+      if (newMeta != worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
+        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3)
+      }
     }
   }
 

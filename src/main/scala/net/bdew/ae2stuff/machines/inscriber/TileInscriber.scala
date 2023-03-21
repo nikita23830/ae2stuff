@@ -240,9 +240,11 @@ class TileInscriber
       z: Int
   ) = oldBlock != newBlock
   onWake.listen(() =>
-    worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3)
+    if (worldObj.blockExists(xCoord, yCoord, zCoord))
+      worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3)
   )
   onSleep.listen(() =>
-    worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)
+    if (worldObj.blockExists(xCoord, yCoord, zCoord))
+      worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3)
   )
 }
