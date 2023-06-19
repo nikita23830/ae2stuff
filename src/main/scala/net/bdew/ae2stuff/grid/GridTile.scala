@@ -39,12 +39,12 @@ trait GridTile extends TileExtended with IGridHost with IGridBlock {
     }
   })
 
-  persistSave.listen((tag) => {
+  persistSave.listen(tag => {
     if (node != null)
       node.saveToNBT("ae_node", tag)
   })
 
-  persistLoad.listen((tag) => {
+  persistLoad.listen(tag => {
     if (FMLCommonHandler.instance().getEffectiveSide.isServer) {
       unRegisterNode()
       node = AEApi.instance().createGridNode(this)

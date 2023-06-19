@@ -29,7 +29,7 @@ trait ContainerUpgradeable extends BaseContainer {
       player: EntityPlayer,
       baseX: Int,
       baseY: Int,
-      astc: (Slot) => Unit
+      astc: Slot => Unit
   ): Unit = {
     this.upgradeInventory = upgradeInventory
     netToolSlot = UpgradeableHelper.findNetworktoolStack(player)
