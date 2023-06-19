@@ -15,7 +15,7 @@ import net.bdew.ae2stuff.grid.PoweredTile
 import net.bdew.ae2stuff.machines.wireless.TileWireless
 
 object WailaHandler {
-  def loadCallback(reg: IWailaRegistrar) {
+  def loadCallback(reg: IWailaRegistrar): Unit = {
     AE2Stuff.logDebug("WAILA callback received, loading...")
     reg.registerBodyProvider(WailaPoweredDataProvider, classOf[PoweredTile])
     reg.registerNBTProvider(WailaPoweredDataProvider, classOf[PoweredTile])

@@ -27,7 +27,7 @@ object VisualiserPlayerTracker {
 
   var map = mutable.Map.empty[EntityPlayer, Entry]
 
-  def init() {
+  def init(): Unit = {
     FMLCommonHandler.instance().bus().register(this)
   }
 

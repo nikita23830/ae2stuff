@@ -83,7 +83,7 @@ object TuningLoader {
 
   def loadDelayed() = loader.processRecipeStatements()
 
-  def loadConfigFiles() {
+  def loadConfigFiles(): Unit = {
     if (!AE2Stuff.configDir.exists()) {
       AE2Stuff.configDir.mkdir()
       val nl = System.getProperty("line.separator")

@@ -39,12 +39,12 @@ trait GridTile extends TileExtended with IGridHost with IGridBlock {
     }
   })
 
-  persistSave.listen((tag) => {
+  persistSave.listen(tag => {
     if (node != null)
       node.saveToNBT("ae_node", tag)
   })
 
-  persistLoad.listen((tag) => {
+  persistLoad.listen(tag => {
     if (FMLCommonHandler.instance().getEffectiveSide.isServer) {
       unRegisterNode()
       node = AEApi.instance().createGridNode(this)
@@ -119,7 +119,7 @@ trait GridTile extends TileExtended with IGridHost with IGridBlock {
   override def getMachineRepresentation: ItemStack
 
   // Default notifications do nothing
-  override def onGridNotification(p1: GridNotification) {}
-  override def setNetworkStatus(p1: IGrid, p2: Int) {}
-  override def gridChanged() {}
+  override def onGridNotification(p1: GridNotification): Unit = {}
+  override def setNetworkStatus(p1: IGrid, p2: Int): Unit = {}
+  override def gridChanged(): Unit = {}
 }

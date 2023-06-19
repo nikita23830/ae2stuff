@@ -21,12 +21,12 @@ import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.common.MinecraftForge
 
 object MouseEventHandler {
-  def init() {
+  def init(): Unit = {
     MinecraftForge.EVENT_BUS.register(this)
   }
 
   @SubscribeEvent
-  def handleMouseEvent(ev: MouseEvent) {
+  def handleMouseEvent(ev: MouseEvent): Unit = {
     if (ev.dwheel == 0) return
     if (Client.minecraft.currentScreen != null) return
     val player = Client.player

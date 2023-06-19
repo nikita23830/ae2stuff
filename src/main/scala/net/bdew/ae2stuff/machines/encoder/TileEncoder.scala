@@ -53,7 +53,7 @@ class TileEncoder
 
   def getResult = getStackInSlot(slots.result)
 
-  override def markDirty() {
+  override def markDirty(): Unit = {
     if (!worldObj.isRemote)
       inv(slots.encoded) =
         encodePattern() // direct to prevent an infinite recursion
