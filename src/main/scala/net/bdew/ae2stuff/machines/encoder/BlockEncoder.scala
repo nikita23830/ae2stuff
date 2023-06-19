@@ -50,7 +50,7 @@ object BlockEncoder
       blockIcon
 
   @SideOnly(Side.CLIENT)
-  override def registerBlockIcons(reg: IIconRegister) {
+  override def registerBlockIcons(reg: IIconRegister): Unit = {
     blockIcon = reg.registerIcon(Misc.iconName(modId, name, "side"))
     topIconOn = reg.registerIcon(Misc.iconName(modId, name, "top_on"))
     topIconOff = reg.registerIcon(Misc.iconName(modId, name, "top_off"))
@@ -85,7 +85,7 @@ object BlockEncoder
       z: Int,
       player: EntityLivingBase,
       stack: ItemStack
-  ) {
+  ): Unit = {
     super.onBlockPlacedBy(world, x, y, z, player, stack)
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]

@@ -20,7 +20,7 @@ class GuiGrower(cont: ContainerGrower)
     Texture(AE2Stuff.modId, "textures/gui/grower.png", rect)
   val upgradesRect = new Rect(179, 0, 32, 68)
   val toolBoxRect = new Rect(178, 86, 68, 68)
-  override def initGui() {
+  override def initGui(): Unit = {
     super.initGui()
     widgets.add(
       new WidgetLabel(BlockGrower.getLocalizedName, 8, 6, Color.darkGray)

@@ -48,7 +48,7 @@ object BlockWireless
       z: Int,
       player: EntityLivingBase,
       stack: ItemStack
-  ) {
+  ): Unit = {
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
   }

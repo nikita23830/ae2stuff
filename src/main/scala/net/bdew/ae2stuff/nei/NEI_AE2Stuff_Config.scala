@@ -14,7 +14,7 @@ import codechicken.nei.guihook.GuiContainerManager
 import net.bdew.ae2stuff.machines.encoder.GuiEncoder
 
 class NEI_AE2Stuff_Config extends IConfigureNEI {
-  override def loadConfig() {
+  override def loadConfig(): Unit = {
     GuiInfo.customSlotGuis.add(classOf[GuiEncoder])
     API.registerGuiOverlayHandler(
       classOf[GuiEncoder],

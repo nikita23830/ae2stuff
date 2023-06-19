@@ -24,7 +24,7 @@ object EncoderOverlayHandler extends IOverlayHandler {
       recipe: IRecipeHandler,
       recipeIndex: Int,
       shift: Boolean
-  ) {
+  ): Unit = {
     val items = recipe.getIngredientStacks(recipeIndex)
     val stacks = (for (pStack <- items if pStack != null) yield {
       val x = (pStack.relx - 25) / 18

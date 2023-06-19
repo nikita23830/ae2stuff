@@ -25,7 +25,7 @@ class GuiInscriber(cont: ContainerInscriber)
   val upgradesRect = new Rect(179, 0, 32, 104)
   val toolBoxRect = new Rect(178, 105, 68, 68)
 
-  override def initGui() {
+  override def initGui(): Unit = {
     super.initGui()
     widgets.add(
       new WidgetLabel(

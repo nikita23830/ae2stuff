@@ -39,7 +39,7 @@ class ContainerEncoder(val te: TileEncoder, player: EntityPlayer)
 
   bindPlayerInventory(player.inventory, 8, 84, 142)
 
-  def updateRecipe() {
+  def updateRecipe(): Unit = {
     val c = new InventoryCrafting(this, 3, 3)
     for (i <- 0 until 9)
       c.setInventorySlotContents(i, te.getStackInSlot(te.slots.recipe(i)))
@@ -126,7 +126,7 @@ class ContainerEncoder(val te: TileEncoder, player: EntityPlayer)
     super.transferStackInSlot(player, slot)
   }
 
-  override def detectAndSendChanges() {
+  override def detectAndSendChanges(): Unit = {
     super.detectAndSendChanges()
     if (!te.getWorldObj.isRemote) {
       if (!te.getNode.isActive) {

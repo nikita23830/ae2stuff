@@ -57,7 +57,7 @@ object AE2Stuff {
     log.error(msg.format(args: _*), t)
 
   @EventHandler
-  def preInit(event: FMLPreInitializationEvent) {
+  def preInit(event: FMLPreInitializationEvent): Unit = {
     log = event.getModLog
     configDir = new File(event.getModConfigurationDirectory, "AE2Stuff")
     TuningLoader.loadConfigFiles()
@@ -66,7 +66,7 @@ object AE2Stuff {
   }
 
   @EventHandler
-  def init(event: FMLInitializationEvent) {
+  def init(event: FMLInitializationEvent): Unit = {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler)
     NetHandler.init()
     if (event.getSide == Side.CLIENT) {
@@ -87,7 +87,7 @@ object AE2Stuff {
   val onPostInit = Event[FMLPostInitializationEvent]
 
   @EventHandler
-  def postInit(event: FMLPostInitializationEvent) {
+  def postInit(event: FMLPostInitializationEvent): Unit = {
     TuningLoader.loadDelayed()
     onPostInit.trigger(event)
   }

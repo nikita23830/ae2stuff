@@ -47,7 +47,7 @@ object BlockInscriber
       sideIconOff
 
   @SideOnly(Side.CLIENT)
-  override def registerBlockIcons(reg: IIconRegister) {
+  override def registerBlockIcons(reg: IIconRegister): Unit = {
     sideIconOn = reg.registerIcon(Misc.iconName(modId, name, "side_on"))
     sideIconOff = reg.registerIcon(Misc.iconName(modId, name, "side_off"))
     topIcon = reg.registerIcon(Misc.iconName(modId, name, "top"))
@@ -75,7 +75,7 @@ object BlockInscriber
       z: Int,
       player: EntityLivingBase,
       stack: ItemStack
-  ) {
+  ): Unit = {
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
   }

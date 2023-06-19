@@ -20,7 +20,7 @@ trait VariableIdlePower extends TileExtended with GridTile {
 
   override def getIdlePowerUsage = currentPowerUsage
 
-  def setIdlePowerUse(v: Double) {
+  def setIdlePowerUse(v: Double): Unit = {
     if (v != currentPowerUsage) {
       currentPowerUsage = v
       if (node != null && node.getGrid != null)

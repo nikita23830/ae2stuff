@@ -40,7 +40,7 @@ object BlockGrower
       iconOff
 
   @SideOnly(Side.CLIENT)
-  override def registerBlockIcons(reg: IIconRegister) {
+  override def registerBlockIcons(reg: IIconRegister): Unit = {
     iconOn = reg.registerIcon(Misc.iconName(modId, name, "main_on"))
     iconOff = reg.registerIcon(Misc.iconName(modId, name, "main_off"))
   }
@@ -67,7 +67,7 @@ object BlockGrower
       z: Int,
       player: EntityLivingBase,
       stack: ItemStack
-  ) {
+  ): Unit = {
     if (player.isInstanceOf[EntityPlayer])
       getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
   }

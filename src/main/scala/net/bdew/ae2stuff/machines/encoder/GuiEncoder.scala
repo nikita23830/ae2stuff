@@ -17,7 +17,7 @@ import net.bdew.lib.gui.{BaseScreen, Color, Texture}
 class GuiEncoder(cont: ContainerEncoder) extends BaseScreen(cont, 176, 166) {
   override val background =
     Texture(AE2Stuff.modId, "textures/gui/encoder.png", rect)
-  override def initGui() {
+  override def initGui(): Unit = {
     super.initGui()
     widgets.add(
       new WidgetLabel(BlockEncoder.getLocalizedName, 8, 6, Color.darkGray)
