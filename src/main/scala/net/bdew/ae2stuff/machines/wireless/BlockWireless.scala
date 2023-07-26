@@ -9,6 +9,7 @@
 
 package net.bdew.ae2stuff.machines.wireless
 
+import appeng.items.tools.quartz.ToolQuartzCuttingKnife
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.ae2stuff.misc.{BlockWrenchable, MachineMaterial}
 import net.bdew.lib.Misc
@@ -49,8 +50,13 @@ object BlockWireless
       player: EntityLivingBase,
       stack: ItemStack
   ): Unit = {
-    if (player.isInstanceOf[EntityPlayer])
-      getTE(world, x, y, z).placingPlayer = player.asInstanceOf[EntityPlayer]
+    if (player.isInstanceOf[EntityPlayer]) {
+      val te = getTE(world, x, y, z)
+      te.placingPlayer = player.asInstanceOf[EntityPlayer]
+      if (stack != null && stack.hasDisplayName) {
+        te.customName = stack.getDisplayName
+      }
+    }
   }
 
   override def onBlockActivatedReal(
@@ -63,7 +69,15 @@ object BlockWireless
       xOffs: Float,
       yOffs: Float,
       zOffs: Float
-  ): Boolean = false
+  ): Boolean = {
+    val item = player.getHeldItem
+    if (item != null && item.getItem.isInstanceOf[ToolQuartzCuttingKnife]) {
+      if (!world.isRemote) {
+        return true
+      }
+    }
+    false
+  }
 
   var icon_on_side: IIcon = null
   var icon_off_side: IIcon = null
