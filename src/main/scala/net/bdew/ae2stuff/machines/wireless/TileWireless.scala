@@ -181,11 +181,10 @@ class TileWireless
       who: EntityPlayer
   ): Boolean = {
     this.color = colour
+    this.getGridNode(side).updateState()
     true
   }
 
-  override def getConnectableSides: util.EnumSet[ForgeDirection] =
-    super.getConnectableSides
   override def getColor: AEColor = color
 
   override def getGridColor: AEColor = color
