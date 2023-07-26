@@ -10,7 +10,6 @@
 package net.bdew.ae2stuff.machines.wireless
 
 import java.util
-
 import appeng.api.AEApi
 import appeng.api.networking.{GridFlags, IGridConnection}
 import net.bdew.ae2stuff.AE2Stuff
@@ -20,6 +19,7 @@ import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.lib.multiblock.data.DataSlotPos
 import net.minecraft.block.Block
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 
 class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
@@ -32,6 +32,7 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
 
   lazy val myPos = BlockRef.fromTile(this)
 
+  var customName: String = ""
   def isLinked = link.isDefined
   def getLink = link flatMap (_.getTile[TileWireless](worldObj))
 
@@ -58,6 +59,7 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
   def doLink(other: TileWireless): Boolean = {
     if (other.link.isEmpty) {
       other.link.set(myPos)
+      this.customName = other.customName
       link.set(other.myPos)
       setupConnection()
     } else false
@@ -143,4 +145,16 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
       z: Int
   ): Boolean =
     newBlock != BlockWireless
+
+  override def doSave(kind: UpdateKind.Value, t: NBTTagCompound): Unit = {
+    super.doSave(kind, t)
+    if (customName != "") {
+      t.setString("CustomName", customName)
+    }
+  }
+
+  override def doLoad(kind: UpdateKind.Value, t: NBTTagCompound): Unit = {
+    super.doLoad(kind, t)
+    this.customName = t.getString("CustomName")
+  }
 }

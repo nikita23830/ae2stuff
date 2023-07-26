@@ -43,11 +43,15 @@ object WailaWirelessDataProvider
           "channels" -> (if (te.connection != null)
                            te.connection.getUsedChannels
                          else 0),
-          "power" -> PowerMultiplier.CONFIG.multiply(te.getIdlePowerUsage)
+          "power" -> PowerMultiplier.CONFIG.multiply(te.getIdlePowerUsage),
+          "name" -> te.customName
         )
       )
     } else {
-      tag.setTag("wireless_waila", NBT("connected" -> false))
+      tag.setTag("wireless_waila", NBT(
+        "connected" -> false,
+        "name" -> te.customName
+      ))
     }
     tag
   }
@@ -60,6 +64,7 @@ object WailaWirelessDataProvider
   ): Iterable[String] = {
     if (acc.getNBTData.hasKey("wireless_waila")) {
       val data = acc.getNBTData.getCompoundTag("wireless_waila")
+      val name = data.getString("name")
       if (data.getBoolean("connected")) {
         val pos = BlockRef.fromNBT(data.getCompoundTag("target"))
         List(
@@ -73,9 +78,10 @@ object WailaWirelessDataProvider
             "ae2stuff.waila.wireless.power",
             DecFormat.short(data.getDouble("power"))
           )
-        )
+        ).++(if (name != "") Misc.toLocalF("ae2stuff.waila.wireless.name", name)::Nil else Nil)
       } else {
         List(Misc.toLocal("ae2stuff.waila.wireless.notconnected"))
+          .++(if (name != "") Misc.toLocalF("ae2stuff.waila.wireless.name", name)::Nil else Nil)
       }
     } else List.empty
   }
