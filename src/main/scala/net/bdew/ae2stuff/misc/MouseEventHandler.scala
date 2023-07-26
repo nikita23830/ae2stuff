@@ -21,6 +21,8 @@ import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.common.MinecraftForge
 
 object MouseEventHandler {
+  private val VISUALISATION_MODES = VisualisationModes.values.toList
+
   def init(): Unit = {
     MinecraftForge.EVENT_BUS.register(this)
   }
@@ -37,12 +39,12 @@ object MouseEventHandler {
       val newMode =
         if (ev.dwheel.signum > 0)
           Misc.nextInSeq(
-            VisualisationModes.modes,
+            VISUALISATION_MODES,
             ItemVisualiser.getMode(stack)
           )
         else
           Misc.prevInSeq(
-            VisualisationModes.modes,
+            VISUALISATION_MODES,
             ItemVisualiser.getMode(stack)
           )
       ItemVisualiser.setMode(stack, newMode)
