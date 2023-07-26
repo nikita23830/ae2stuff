@@ -4,7 +4,7 @@ dependencies {
     api('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-228-GTNH:dev')
     api('com.github.GTNewHorizons:bdlib:1.9.8-GTNH:dev')
 
-    compileOnly('com.github.GTNewHorizons:waila:1.6.0:dev') {transitive=false}
+    implementation('com.github.GTNewHorizons:waila:1.6.0:dev') {transitive=false}
     compileOnly('com.github.GTNewHorizons:NotEnoughItems:2.3.55-GTNH:dev')
     compileOnly('com.github.GTNewHorizons:BuildCraft:7.1.34:dev')
 }

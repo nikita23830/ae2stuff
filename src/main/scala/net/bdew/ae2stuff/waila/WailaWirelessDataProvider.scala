@@ -10,6 +10,7 @@
 package net.bdew.ae2stuff.waila
 
 import appeng.api.config.PowerMultiplier
+import appeng.api.util.AEColor
 import mcp.mobius.waila.api.{IWailaConfigHandler, IWailaDataAccessor}
 import net.bdew.ae2stuff.machines.wireless.TileWireless
 import net.bdew.lib.block.BlockRef
@@ -44,14 +45,19 @@ object WailaWirelessDataProvider
                            te.connection.getUsedChannels
                          else 0),
           "power" -> PowerMultiplier.CONFIG.multiply(te.getIdlePowerUsage),
-          "name" -> te.customName
+          "name" -> te.customName,
+          "color" -> te.color.ordinal()
         )
       )
     } else {
-      tag.setTag("wireless_waila", NBT(
-        "connected" -> false,
-        "name" -> te.customName
-      ))
+      tag.setTag(
+        "wireless_waila",
+        NBT(
+          "connected" -> false,
+          "name" -> te.customName,
+          "color" -> te.color.ordinal()
+        )
+      )
     }
     tag
   }
@@ -65,6 +71,7 @@ object WailaWirelessDataProvider
     if (acc.getNBTData.hasKey("wireless_waila")) {
       val data = acc.getNBTData.getCompoundTag("wireless_waila")
       val name = data.getString("name")
+      val color = data.getInteger("color")
       if (data.getBoolean("connected")) {
         val pos = BlockRef.fromNBT(data.getCompoundTag("target"))
         List(
@@ -78,10 +85,21 @@ object WailaWirelessDataProvider
             "ae2stuff.waila.wireless.power",
             DecFormat.short(data.getDouble("power"))
           )
-        ).++(if (name != "") Misc.toLocalF("ae2stuff.waila.wireless.name", name)::Nil else Nil)
+        )
+          .++(if (name != "") {
+            Misc.toLocalF("ae2stuff.waila.wireless.name", name) :: Nil
+          } else Nil)
+          .++(if (color != AEColor.Transparent.ordinal()) {
+            Misc.toLocal(AEColor.values().apply(color).unlocalizedName) :: Nil
+          } else Nil)
       } else {
         List(Misc.toLocal("ae2stuff.waila.wireless.notconnected"))
-          .++(if (name != "") Misc.toLocalF("ae2stuff.waila.wireless.name", name)::Nil else Nil)
+          .++(if (name != "") {
+            Misc.toLocalF("ae2stuff.waila.wireless.name", name) :: Nil
+          } else Nil)
+          .++(if (color != AEColor.Transparent.ordinal()) {
+            Misc.toLocal(AEColor.values().apply(color).unlocalizedName) :: Nil
+          } else Nil)
       }
     } else List.empty
   }

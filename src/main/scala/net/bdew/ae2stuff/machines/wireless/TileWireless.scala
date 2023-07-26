@@ -11,18 +11,27 @@ package net.bdew.ae2stuff.machines.wireless
 
 import java.util
 import appeng.api.AEApi
+import appeng.api.implementations.tiles.IColorableTile
 import appeng.api.networking.{GridFlags, IGridConnection}
+import appeng.api.util.AEColor
+import appeng.me.helpers.AENetworkProxy
 import net.bdew.ae2stuff.AE2Stuff
 import net.bdew.ae2stuff.grid.{GridTile, VariableIdlePower}
 import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.lib.multiblock.data.DataSlotPos
 import net.minecraft.block.Block
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
+import net.minecraftforge.common.util.ForgeDirection
 
-class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
+class TileWireless
+    extends TileDataSlots
+    with GridTile
+    with VariableIdlePower
+    with IColorableTile {
   val cfg = MachineWireless
 
   val link =
@@ -33,6 +42,7 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
   lazy val myPos = BlockRef.fromTile(this)
 
   var customName: String = ""
+  var color: AEColor = AEColor.Transparent
   def isLinked = link.isDefined
   def getLink = link flatMap (_.getTile[TileWireless](worldObj))
 
@@ -151,10 +161,32 @@ class TileWireless extends TileDataSlots with GridTile with VariableIdlePower {
     if (customName != "") {
       t.setString("CustomName", customName)
     }
+    t.setString("CustomName", customName)
+    t.setShort("Color", color.ordinal().toShort)
   }
 
   override def doLoad(kind: UpdateKind.Value, t: NBTTagCompound): Unit = {
     super.doLoad(kind, t)
     this.customName = t.getString("CustomName")
+    if (!t.hasKey("Color")) {
+      t.setShort("Color", AEColor.Transparent.ordinal().toShort)
+    }
+    val colorIdx = t.getShort("Color").toInt
+    this.color = AEColor.values().apply(colorIdx)
   }
+
+  override def recolourBlock(
+      side: ForgeDirection,
+      colour: AEColor,
+      who: EntityPlayer
+  ): Boolean = {
+    this.color = colour
+    true
+  }
+
+  override def getConnectableSides: util.EnumSet[ForgeDirection] =
+    super.getConnectableSides
+  override def getColor: AEColor = color
+
+  override def getGridColor: AEColor = color
 }
