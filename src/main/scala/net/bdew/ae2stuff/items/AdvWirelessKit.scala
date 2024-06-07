@@ -48,8 +48,18 @@ object AdvWirelessKit
       world: World,
       player: EntityPlayer
   ): ItemStack = {
+    import net.bdew.lib.helpers.ChatHelper._
     if (!world.isRemote && player.isSneaking) {
       toggleMode(stack)
+      if(getMode(stack) == 0) {
+        player.addChatMessage(
+          L("ae2stuff.wireless.advtool.queueing.activated").setColor(Color.GREEN)
+        )
+      } else {
+        player.addChatMessage(
+          L("ae2stuff.wireless.advtool.binding.activated").setColor(Color.GREEN)
+        )
+      }
     }
     stack
   }
@@ -72,6 +82,15 @@ object AdvWirelessKit
     if (!world.isRemote) {
       if (player.isSneaking) {
         toggleMode(stack)
+        if(getMode(stack) == 0) {
+          player.addChatMessage(
+            L("ae2stuff.wireless.advtool.queueing.activated").setColor(Color.GREEN)
+          )
+        } else {
+          player.addChatMessage(
+            L("ae2stuff.wireless.advtool.binding.activated").setColor(Color.GREEN)
+          )
+        }
         return true;
       }
       pos.getTile[TileWireless](world) foreach { tile =>
