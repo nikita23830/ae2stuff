@@ -45,10 +45,10 @@ object AdvWirelessKit
 
   override def onItemRightClick(
       stack: ItemStack,
-      worldIn: World,
+      world: World,
       player: EntityPlayer
   ): ItemStack = {
-    if (player.isSneaking) {
+    if (!world.isRemote && player.isSneaking) {
       toggleMode(stack)
     }
     stack
@@ -66,14 +66,14 @@ object AdvWirelessKit
       yOff: Float,
       zOff: Float
   ): Boolean = {
-    if (player.isSneaking) {
-      toggleMode(stack)
-      return true;
-    }
     import net.bdew.lib.helpers.ChatHelper._
     val pos = BlockRef(x, y, z)
     if (!pos.blockIs(world, BlockWireless)) return false
     if (!world.isRemote) {
+      if (player.isSneaking) {
+        toggleMode(stack)
+        return true;
+      }
       pos.getTile[TileWireless](world) foreach { tile =>
         val pid = Security.getPlayerId(player)
         // Check that the player can modify the network
