@@ -15,24 +15,24 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 
 trait ItemLocationStore extends Item {
-  def hasLocation(stack: ItemStack) =
+  def hasLocation(stack: ItemStack): Boolean =
     stack.getItem == this && stack.hasTagCompound && stack.getTagCompound
       .hasKey("loc")
 
-  def getLocation(stack: ItemStack) =
+  def getLocation(stack: ItemStack): BlockRef =
     BlockRef.fromNBT(stack.getTagCompound.getCompoundTag("loc"))
 
-  def getDimension(stack: ItemStack) =
+  def getDimension(stack: ItemStack): Int =
     stack.getTagCompound.getInteger("dim")
 
-  def setLocation(stack: ItemStack, loc: BlockRef, dimension: Int) = {
+  def setLocation(stack: ItemStack, loc: BlockRef, dimension: Int): Unit = {
     if (!stack.hasTagCompound) stack.setTagCompound(new NBTTagCompound)
     val tag = stack.getTagCompound
     tag.setTag("loc", NBT.from(loc.writeToNBT _))
     tag.setInteger("dim", dimension)
   }
 
-  def clearLocation(stack: ItemStack) = {
+  def clearLocation(stack: ItemStack): Unit = {
     if (stack.hasTagCompound) {
       stack.getTagCompound.removeTag("loc")
       stack.getTagCompound.removeTag("dim")
