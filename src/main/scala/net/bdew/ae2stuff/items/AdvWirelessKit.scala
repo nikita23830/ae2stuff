@@ -51,9 +51,11 @@ object AdvWirelessKit
     import net.bdew.lib.helpers.ChatHelper._
     if (!world.isRemote && player.isSneaking) {
       toggleMode(stack)
-      if(getMode(stack) == 0) {
+      if (getMode(stack) == 0) {
         player.addChatMessage(
-          L("ae2stuff.wireless.advtool.queueing.activated").setColor(Color.GREEN)
+          L("ae2stuff.wireless.advtool.queueing.activated").setColor(
+            Color.GREEN
+          )
         )
       } else {
         player.addChatMessage(
@@ -82,13 +84,17 @@ object AdvWirelessKit
     if (!world.isRemote) {
       if (player.isSneaking) {
         toggleMode(stack)
-        if(getMode(stack) == 0) {
+        if (getMode(stack) == 0) {
           player.addChatMessage(
-            L("ae2stuff.wireless.advtool.queueing.activated").setColor(Color.GREEN)
+            L("ae2stuff.wireless.advtool.queueing.activated").setColor(
+              Color.GREEN
+            )
           )
         } else {
           player.addChatMessage(
-            L("ae2stuff.wireless.advtool.binding.activated").setColor(Color.GREEN)
+            L("ae2stuff.wireless.advtool.binding.activated").setColor(
+              Color.GREEN
+            )
           )
         }
         return true;
