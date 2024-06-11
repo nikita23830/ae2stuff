@@ -90,6 +90,7 @@ object AE2Stuff {
   def postInit(event: FMLPostInitializationEvent): Unit = {
     TuningLoader.loadDelayed()
     onPostInit.trigger(event)
+    Recipes.load()
   }
 
   @EventHandler
