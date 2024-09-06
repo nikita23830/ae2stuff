@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    api('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-450-GTNH:dev')
+    api('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-451-GTNH:dev')
     api('com.github.GTNewHorizons:bdlib:1.10.0-GTNH:dev')
 
     implementation('com.github.GTNewHorizons:waila:1.8.1:dev') {transitive=false}
