@@ -225,7 +225,10 @@ object VisualiserOverlayRender extends WorldOverlayRenderer {
   override def doRender(partialTicks: Float): Unit = {
     if (Client.player != null) {
       val stack = Client.player.inventory.getCurrentItem
-      if (stack != null && stack.getItem == ItemVisualiser) {
+      if (
+        stack != null && stack.getItem == ItemVisualiser && stack.hasTagCompound && stack.getTagCompound
+          .hasKey("dim")
+      ) {
 
         // Do not render if in a different dimension from the bound network
         val networkDim = stack.getTagCompound.getInteger("dim")
