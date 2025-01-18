@@ -1,0 +1,13 @@
+{
+  "ideaDirPath": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea",
+  "modulesMap": {
+    "ae2stuffNH": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.iml",
+    "ae2stuffNH:api": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.api.iml",
+    "ae2stuffNH:ideVirtualMain": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.ideVirtualMain.iml",
+    "ae2stuffNH:injectedTags": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.injectedTags.iml",
+    "ae2stuffNH:main": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.main.iml",
+    "ae2stuffNH:mcLauncher": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.mcLauncher.iml",
+    "ae2stuffNH:patchedMc": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.patchedMc.iml",
+    "ae2stuffNH:test": "C:/Users/serenibyss/Documents/GitHub/ae2stuffNH/.idea/modules/ae2stuffNH.test.iml"
+  }
+}
