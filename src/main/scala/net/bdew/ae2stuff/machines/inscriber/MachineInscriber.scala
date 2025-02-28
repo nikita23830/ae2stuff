@@ -33,6 +33,7 @@ object MachineInscriber
   AE2Stuff.onPostInit.listen { ev =>
     // Can't do this too early, causes error
     Upgrades.SPEED.registerItem(new ItemStack(BlockInscriber), 5)
+    Upgrades.SUPERSPEED.registerItem(new ItemStack(BlockInscriber), 5)
   }
 
   NetHandler.regServerHandler { case (MsgSetLock(slot, lock), player) =>

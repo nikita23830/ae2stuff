@@ -32,6 +32,7 @@ object MachineGrower
   AE2Stuff.onPostInit.listen { ev =>
     // Can't do this too early, causes error
     Upgrades.SPEED.registerItem(new ItemStack(BlockGrower), 3)
+    Upgrades.SUPERSPEED.registerItem(new ItemStack(BlockGrower), 3)
   }
 
   @SideOnly(Side.CLIENT)

@@ -36,7 +36,7 @@ class TileGrower
   override def getMachineRepresentation = new ItemStack(BlockGrower)
   override def powerCapacity = MachineGrower.powerCapacity
 
-  val upgrades = new UpgradeInventory("upgrades", this, 3, Set(Upgrades.SPEED))
+  val upgrades = new UpgradeInventory("upgrades", this, 3, Set(Upgrades.SPEED, Upgrades.SUPERSPEED))
 
   val redstoneDust = GameRegistry.findItem("minecraft", "redstone")
   val netherQuartz = GameRegistry.findItem("minecraft", "quartz")
@@ -51,7 +51,7 @@ class TileGrower
     ) {
       var hadWork = false
       val needPower =
-        MachineGrower.cyclePower * (1 + upgrades.cards(Upgrades.SPEED))
+        MachineGrower.cyclePower * (1 + upgrades.cards(Upgrades.SPEED)) + MachineGrower.cyclePower * 2 * (1 + upgrades.cards(Upgrades.SUPERSPEED))
       if (powerStored >= needPower) {
         val invZipped = inv.zipWithIndex.filter(_._1 != null)
         for (
@@ -61,6 +61,12 @@ class TileGrower
           var ns = stack
           for (
             i <- 0 to upgrades.cards(Upgrades.SPEED)
+            if stack.getItem.isInstanceOf[IGrowableCrystal]
+          )
+            ns =
+              stack.getItem.asInstanceOf[IGrowableCrystal].triggerGrowth(stack)
+          for (
+            i <- 0 to upgrades.cards(Upgrades.SUPERSPEED) * 2
             if stack.getItem.isInstanceOf[IGrowableCrystal]
           )
             ns =

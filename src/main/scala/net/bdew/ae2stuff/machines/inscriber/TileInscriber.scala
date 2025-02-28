@@ -43,7 +43,7 @@ class TileInscriber
     val output = 3
   }
 
-  val upgrades = new UpgradeInventory("upgrades", this, 5, Set(Upgrades.SPEED))
+  val upgrades = new UpgradeInventory("upgrades", this, 5, Set(Upgrades.SPEED, Upgrades.SUPERSPEED))
   val progress =
     DataSlotFloat("progress", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
   val output = DataSlotItemStack("output", this).setUpdate(UpdateKind.SAVE)
@@ -84,7 +84,7 @@ class TileInscriber
           val progressPerTick =
             (1f / MachineInscriber.cycleTicks) * (1 + upgrades.cards(
               Upgrades.SPEED
-            ))
+            )) * (1 + upgrades.cards(Upgrades.SUPERSPEED) * 2)
           val powerNeeded = MachineInscriber.cyclePower * progressPerTick
           if (powerStored >= powerNeeded) {
             // Have enough power - consume it and add to progress
